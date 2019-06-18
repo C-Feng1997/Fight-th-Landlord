@@ -21,14 +21,14 @@ public:
     void NewGame(); //开始新的一局游戏，做一些初始化Player的操作
     void clearChaiFenPai(); //清空拆分牌的集合
     inline void DePai(int xuHao) {shouPai.insert(xuHao);}   //用户得对应序号的牌
-    bool CompareMyself(PokersZuHe *p1, PokersZuHe*p2);  //AI由场上牌比较自己的牌，查看是否有可以出的牌
+    static bool CompareMyself(PokersZuHe *p1, PokersZuHe*p2);  //AI由场上牌比较自己的牌，查看是否有可以出的牌
     void AiXuanPai();  //AI选牌
     void FenXiChaiFenZuHe();    //分析并拆分牌型
     void DeleteZeroQuanZhi_shuLiang(std::map<int,int> &quanZhi_shuLiang);   //删除 权值_集合 中数量为零的元素
 
     //给一个权值，从手牌副本中找到相应的序号，然后从集合中删除并返回该序号；若未找到或无效则返回-1
     int FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi);
-
+    void DeleteWeiZhi();    //从拆分牌中删除所有未知类型的牌型
 private:
     Game &game;                             //游戏对象
     bool buChu;                             //不出标志

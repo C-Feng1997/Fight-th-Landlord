@@ -13,7 +13,7 @@
 //一组牌的可能类型
 enum Type{
     WeiZhi,     //未知牌型
-    DaniZhang,  //单张
+    DanZhang,  //单张
     DuiZi,      //对子
     ShunZi,     //顺子
     SanDaiYi,   //三带一
@@ -25,6 +25,7 @@ enum Type{
 //牌型结构
 class PokersZuHe
 {
+
     friend class Player;
 public:
     PokersZuHe();
@@ -41,12 +42,17 @@ public:
     //    牌大王为17;
     static int ZhuanQuanZhi(int xuHao);
 
-private:
     std::map<int, int>pokerQuanZhi;    //3-17权值集合
     std::set<int> pokersXuhao;    //0-53(序号)组成的集合，主要用于方便画面显示
     Type type;  //牌型类型（单牌、对子等等）
     int quanZhi;    //权值
     int yuanSuNum;  //此结构元素数量（牌张数量）
+//private:
+//    std::map<int, int>pokerQuanZhi;    //3-17权值集合
+//    std::set<int> pokersXuhao;    //0-53(序号)组成的集合，主要用于方便画面显示
+//    Type type;  //牌型类型（单牌、对子等等）
+//    int quanZhi;    //权值
+//    int yuanSuNum;  //此结构元素数量（牌张数量）
 };
 
 #endif // POKERSZUHE_H

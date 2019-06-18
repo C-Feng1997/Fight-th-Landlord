@@ -2,6 +2,7 @@
 #include "game.h"
 #include <set>
 #include <map>
+#include <algorithm>
 
 Player::Player(Game &gameNow) : game(gameNow), buChu(false)
 {
@@ -64,7 +65,8 @@ void Player::FenXiChaiFenZuHe()
     {
         //拆分牌集合非空，返回
         return;
-    }else{
+    }else
+    {
         std::set<int> shouPaiFuBen(shouPai);    //手牌副本
         std::map<int, int> quanZhi_shuLiang;    //便于分析的 权值_数量 集合
 
@@ -179,17 +181,17 @@ void Player::FenXiChaiFenZuHe()
                     int first = p->first - 4; //顺子中第一个
 
                     //创建 顺子 牌型对象“顺子”
-                   PokersZuHe *shunZi = new PokersZuHe(ShunZi, p->first);
+                    PokersZuHe *shunZi = new PokersZuHe(ShunZi, p->first);
 
-                   //向 "顺子" 中加入这张牌
-                   for(; first <= p->first; ++first)
-                   {
-                       shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,first));
-                       --quanZhi_shuLiang[first];  //减一
-                   }
-                   chaiFenPai.push_back(shunZi);
-                   exist = true;
-                   break;   //从开始重新查找
+                    //向 "顺子" 中加入这张牌
+                    for(; first <= p->first; ++first)
+                    {
+                        shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,first));
+                        --quanZhi_shuLiang[first];  //减一
+                    }
+                    chaiFenPai.push_back(shunZi);
+                    exist = true;
+                    break;   //从开始重新查找
                 }
 
                 //连续的牌面数量小于5个，重新计数；或者已经到集合末尾仍然数量小于5个
@@ -209,6 +211,74 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
+
+        //删除 权值_集合 中数量为零的元素
+        DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
+        //如果可可能，继续往"顺子"中添加剩余牌
+        //遍历 拆分牌 集合
+        for(auto cfp:chaiFenPai)
+        {
+            if(cfp->type == DanZhang)   //针对于每一个 顺子
+            {
+                //遍历 权值_数量 集合
+                for(auto qzsl : quanZhi_shuLiang)
+                {
+
+                    if (qzsl.second > 0 && qzsl.first == cfp->quanZhi + 1) {
+                        //剩余牌中还有比当前 顺子 最大大1的牌
+                        cfp->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                        //当前 顺子 权值加1
+                        ++cfp->quanZhi;
+                        //对应牌数目减1
+                        --quanZhi_shuLiang[qzsl.first];
+                    }
+                }
+            }
+        }
+        //删除 权值_集合 中数量为零的元素
+        DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
+        if(quanZhi_shuLiang.empty())
+        {
+            //分析集合已空，返回
+            //删除所有 拆分牌 中 未知 类型的牌型
+            DeleteWeiZhi();
+            sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
+        }
+
+        //对子
+        for(auto qzsl:quanZhi_shuLiang)
+        {
+            if(qzsl.second == 2)
+            {
+                PokersZuHe *duiZhi = new PokersZuHe(DuiZi, qzsl.first);
+
+                duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+
+                quanZhi_shuLiang[qzsl.first] = 0;
+                chaiFenPai.push_back(duiZhi);
+            }
+        }
+        //删除 权值_集合 中数量为零的元素
+        DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
+        //单牌
+        for(auto qzsl : quanZhi_shuLiang)
+        {
+            if(qzsl.second != 1){
+                throw std::runtime_error("仍然还有非单张牌");
+            }
+            PokersZuHe *danZhang = new PokersZuHe(DanZhang, qzsl.first);
+            danZhang->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+            quanZhi_shuLiang[qzsl.first] = 0;
+            chaiFenPai.push_back(danZhang);
+        }
+        //删除 权值_集合 中数量为零的元素
+        DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+        DeleteWeiZhi();
+        sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
     }
 }
 
@@ -345,5 +415,22 @@ int Player::FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi)
 
                 throw std::runtime_error("权值没有在副本中");
             }
+}
+
+//删除所有未知类型的牌型
+void Player::DeleteWeiZhi()
+{
+    //遍历 拆分牌 集合，删除”未知“元素
+    auto b = chaiFenPai.begin();
+    while(b != chaiFenPai.end())
+    {
+        if((*b)->type == WeiZhi)
+        {
+            delete *b;
+            b = chaiFenPai.erase(b);
+        }else {
+            ++b;
+        }
+    }
 }
 
