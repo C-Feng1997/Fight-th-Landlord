@@ -34,6 +34,11 @@ public:
     void JiaoDiZhu();   //叫地主阶段
     void FaDiZhuPai();  //发地主牌阶段
     void ChuPai();      //出牌阶段
+    Player *ShangJia();            //上家
+    Player *XiaJia();              //下家
+    int XiJiaNum();         //当前玩家的下家在玩家指针数组中的下标
+
+    void GameOver();        //游戏结束
 private:
     Status status;      //游戏当前状态
     Pokers faPaiDui;    //发牌堆

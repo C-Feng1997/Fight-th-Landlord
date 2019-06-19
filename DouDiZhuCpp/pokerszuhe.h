@@ -20,6 +20,7 @@ enum Type{
     ShuangShun, //双顺
     SanShun,    //三顺
     SanDaiYi,   //三带一
+    SiDaiEr,    //四带二
     FeiJi,      //飞机
     ZhaDan,     //炸弹
 };
@@ -30,11 +31,12 @@ class PokersZuHe
 {
 
     friend class Player;
+    friend class Game;
 public:
     PokersZuHe();
     PokersZuHe(Type typeNow, int quanZhiNow);
     PokersZuHe& operator =(PokersZuHe &pokersZuHe);
-    void AddpokersXuhao(int xuHao);     //添加0-53表示的牌元素
+    void AddPokersXuhao(int xuHao);     //添加0-53表示的牌元素
     void DeletpokersXuhao(int xuHao);   //去掉一张牌
     void Clear( );                  //重置此结构,所有属性值情况
 

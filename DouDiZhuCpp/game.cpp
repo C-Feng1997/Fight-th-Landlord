@@ -94,11 +94,41 @@ void Game::ChuPai()
     }
     else
     {   //如果存在玩家出牌比当前玩家大
+        //清空当前玩家的出牌区
         dangQian->buChu = false;
         dangQian->daChuPai.Clear();
     }
 
-    zuiHou->AiXuanPai();
+    if(dangQian == player[0])
+    {
+        //当前玩家为人
+        if(dangQian->xuanZePai.yuanSuNum
+                && dangQian->WanJiaChuPai())
+        {
+            //玩家已选牌并且符合规定
+            zuiHou = dangQian;
+            //            if(dangQian->daChuPai.type == ZhaDan)
+            // 加倍
+        }
+        else{
+            //继续等待玩家选牌
+            return;
+        }
+    }else {
+        //当前出牌方为电脑;
+        dangQian->AiXuanPai();
+        if (dangQian->AiChuPai())
+            zuiHou = dangQian;
+        //		if (dangQian->daChuPai.type == ZhaDan)//炸弹
+        //        {}
+    }
+
+    if(zuiHou->shouPai.empty())
+    {
+        status = JIESHU;
+    }else {
+        dangQian = XiaJia();
+    }
 }
 
 //获取当前玩家的上家
@@ -129,6 +159,30 @@ int Game::XiJiaNum()
                 break;
     }
     return (i+1) % 3;
+}
+
+void Game::GameOver()
+{
+//    int score = basescore * times;
+    bool IsPeopleWin = false;
+
+    dangQian = diZhu;//把地主设为当前玩家，方便获取上家和下家
+    if (diZhu->shouPai.size()){//农民胜利
+//		diZhu->score -= score * 2;
+//		ProPlayer()->score += score;
+//		NextPlayer()->score += score;
+        if (player[0] != diZhu)
+            IsPeopleWin = true;
+    }
+    else{//地主胜利
+//		diZhu->score += score * 2;
+//		ProPlayer()->score -= score;
+//		NextPlayer()->score -= score;
+        if (player[0] == diZhu)
+            IsPeopleWin = true;
+    }
+
+    GameStart();
 }
 
 

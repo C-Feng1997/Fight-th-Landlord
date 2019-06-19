@@ -21,7 +21,7 @@ PokersZuHe &PokersZuHe::operator =(PokersZuHe &pokersZuHe)
 }
 
 //添加1张以序号表示的牌
-void PokersZuHe::AddpokersXuhao(int xuHao)
+void PokersZuHe::AddPokersXuhao(int xuHao)
 {
     ++yuanSuNum;    //该牌型结构的牌数目（元素）加1
     pokersXuhao.insert(xuHao);  //序号集合中加入该牌序号

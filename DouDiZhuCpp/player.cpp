@@ -70,7 +70,7 @@ void Player::AiXuanPai()
             {
                 if(game.zuiHou != nullptr && //自己是接别人的牌
                         game.zuiHou->daChuPai.type == ZhaDan && //别人最后出的时 炸弹
-                    zhaDan->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //自己的炸弹权值小于对方
+                        zhaDan->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //自己的炸弹权值小于对方
                     continue;   //不能选择改牌
                 xuanZePai = *zhaDan;
             }
@@ -79,13 +79,13 @@ void Player::AiXuanPai()
 
     if(game.zuiHou == nullptr)
     {
-            zhijieChuPai(); //直接出牌
+        zhijieChuPai(); //直接出牌
     }else if(this != game.diZhu && game.zuiHou != game.diZhu)
     {
         genYouFangPai();//跟友方牌：最后出牌的是友方,并且不是提示
     }else {
-        genDiFangPai();//跟敌方的牌或提示
-}
+        genDiFangPai();//跟敌方的牌
+    }
 
 }
 
@@ -117,8 +117,8 @@ void Player::FenXiChaiFenZuHe()
             PokersZuHe *wangZha = new PokersZuHe(ZhaDan, 17);
 
             //在对象“王炸”中加入 牌大王 牌小王
-            wangZha->AddpokersXuhao(FindXuHao(shouPaiFuBen,16));
-            wangZha->AddpokersXuhao(FindXuHao(shouPaiFuBen,17));
+            wangZha->AddPokersXuhao(FindXuHao(shouPaiFuBen,16));
+            wangZha->AddPokersXuhao(FindXuHao(shouPaiFuBen,17));
             //从 权值_数量 集合中抹掉 小王 大王
             quanZhi_shuLiang.erase(16);
             quanZhi_shuLiang.erase(17);
@@ -138,7 +138,7 @@ void Player::FenXiChaiFenZuHe()
                 for (int i = 0; i != 4; i++)
                 {
                     //向 普通炸弹 对象中添加权值为 qzxh.first 的4张牌
-                    ptZhanDan->AddpokersXuhao(FindXuHao(shouPaiFuBen,qzxh.first));
+                    ptZhanDan->AddPokersXuhao(FindXuHao(shouPaiFuBen,qzxh.first));
                 }
 
                 //在拆分牌集合中加入 “普通炸弹” 对象
@@ -162,14 +162,14 @@ void Player::FenXiChaiFenZuHe()
                 two->type = DuiZi;
 
                 //向 two 对象中添加权值为 15 的2张牌
-                two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
-                two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
+                two->AddPokersXuhao(FindXuHao(shouPaiFuBen,15));
+                two->AddPokersXuhao(FindXuHao(shouPaiFuBen,15));
             }else if(quanZhi_shuLiang[15] ==1 )
             {
                 //单张2
                 two->type = DanZhang;
                 //向 two 对象中添加权值为 15 的1张牌
-                two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
+                two->AddPokersXuhao(FindXuHao(shouPaiFuBen,15));
             }
 
             //从 权值_数量 集合中抹掉 牌2
@@ -223,7 +223,7 @@ void Player::FenXiChaiFenZuHe()
                     //shunZiFirst:顺子中第1张牌
                     for(int shunZiFirst = p->first - 4; shunZiFirst <= p->first; ++shunZiFirst)
                     {
-                        shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,shunZiFirst));
+                        shunZi->AddPokersXuhao(FindXuHao(shouPaiFuBen,shunZiFirst));
                         --quanZhi_shuLiang[shunZiFirst];  //对应牌在 权值_集合 中的数目减一
                     }
 
@@ -272,7 +272,7 @@ void Player::FenXiChaiFenZuHe()
 
                     if (qzsl.second > 0 && qzsl.first == cfp->quanZhi + 1) {
                         //剩余牌中还有比当前 顺子 最大大1的牌
-                        cfp->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                        cfp->AddPokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
                         //当前 顺子 权值加1
                         ++cfp->quanZhi;
                         //对应牌数目减1
@@ -300,7 +300,7 @@ void Player::FenXiChaiFenZuHe()
                             if(sunZhi1->quanZhi == sunZhi2->quanZhi - sunZhi2->yuanSuNum)
                             {
                                 for(auto xuHao : sunZhi2->pokersXuhao)
-                                    sunZhi1->AddpokersXuhao(xuHao);
+                                    sunZhi1->AddPokersXuhao(xuHao);
                                 sunZhi1->quanZhi = sunZhi2->quanZhi;
                                 sunZhi2->type = WeiZhi;
                             }
@@ -311,7 +311,7 @@ void Player::FenXiChaiFenZuHe()
                             if(sunZhi2->quanZhi == sunZhi1->quanZhi - sunZhi1->yuanSuNum)
                             {
                                 for(auto xuHao : sunZhi1->pokersXuhao)
-                                    sunZhi2->AddpokersXuhao(xuHao);
+                                    sunZhi2->AddPokersXuhao(xuHao);
                                 sunZhi2->quanZhi = sunZhi1->quanZhi;
                                 sunZhi1->type = WeiZhi;
                             }
@@ -321,7 +321,7 @@ void Player::FenXiChaiFenZuHe()
                             if(sunZhi1->yuanSuNum == sunZhi2->yuanSuNum)
                             {
                                 for(auto xuHao : sunZhi2->pokersXuhao)
-                                    sunZhi2->AddpokersXuhao(xuHao);
+                                    sunZhi2->AddPokersXuhao(xuHao);
                                 sunZhi1->type = ShuangShun;
                                 sunZhi2->type = WeiZhi;
                             }
@@ -367,7 +367,7 @@ void Player::FenXiChaiFenZuHe()
                     {
                         for(int j = 0; j < 2; ++j)
                         {
-                            shuangShun->AddpokersXuhao(FindXuHao(shouPaiFuBen,p->first));
+                            shuangShun->AddPokersXuhao(FindXuHao(shouPaiFuBen,p->first));
                             --p->second;
                         }
                     }
@@ -402,7 +402,7 @@ void Player::FenXiChaiFenZuHe()
                                 danShun->yuanSuNum*2 == shuangShun->yuanSuNum)
                         {
                             for(auto xuHao:danShun->pokersXuhao)
-                                shuangShun->AddpokersXuhao(xuHao);
+                                shuangShun->AddPokersXuhao(xuHao);
                             shuangShun->type = SanShun;
                             danShun->type = WeiZhi;
                         }
@@ -447,7 +447,7 @@ void Player::FenXiChaiFenZuHe()
                             {
                                 for(int j = 0; j < 3; ++j)
                                 {
-                                    sanShun->AddpokersXuhao(FindXuHao(shouPaiFuBen,p->first));
+                                    sanShun->AddPokersXuhao(FindXuHao(shouPaiFuBen,p->first));
                                     --p->second;
                                 }
                             }
@@ -475,7 +475,7 @@ void Player::FenXiChaiFenZuHe()
             {
                 PokersZuHe *sanTiao = new PokersZuHe(SanTiao, qzsl.first);
                 for(int i=0; i<3; i++)
-                    sanTiao->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                    sanTiao->AddPokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
                 quanZhi_shuLiang[qzsl.first] = 0;
                 chaiFenPai.push_back(sanTiao);
             }
@@ -488,8 +488,8 @@ void Player::FenXiChaiFenZuHe()
             {
                 PokersZuHe *duiZhi = new PokersZuHe(DuiZi, qzsl.first);
 
-                duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
-                duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                duiZhi->AddPokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                duiZhi->AddPokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
 
                 quanZhi_shuLiang[qzsl.first] = 0;
                 chaiFenPai.push_back(duiZhi);
@@ -505,7 +505,7 @@ void Player::FenXiChaiFenZuHe()
                 throw std::runtime_error("仍然还有非单张牌");
             }
             PokersZuHe *danZhang = new PokersZuHe(DanZhang, qzsl.first);
-            danZhang->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+            danZhang->AddPokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
             quanZhi_shuLiang[qzsl.first] = 0;
             chaiFenPai.push_back(danZhang);
         }
@@ -698,7 +698,7 @@ void Player::SanDaiYiAndFeiJi()
                     if(danZhang->type == DanZhang)
                     {
                         for(auto xuHao : danZhang->pokersXuhao)
-                            cfp->AddpokersXuhao(xuHao);
+                            cfp->AddPokersXuhao(xuHao);
                         danZhang->type = WeiZhi;
                         --danZhangNum;
                         --n;
@@ -717,7 +717,7 @@ void Player::SanDaiYiAndFeiJi()
                     if(duiZhi->type == DuiZi)
                     {
                         for(auto xuHao : duiZhi->pokersXuhao)
-                            cfp->AddpokersXuhao(xuHao);
+                            cfp->AddPokersXuhao(xuHao);
                         duiZhi->type = WeiZhi;
                         --duiZhiNum;
                         --n;
@@ -743,7 +743,7 @@ void Player::SanDaiYiAndFeiJi()
                     if(cfp->type == DanZhang)
                     {
                         for(auto xuHao:danZhang->pokersXuhao)
-                            cfp->AddpokersXuhao(xuHao);
+                            cfp->AddPokersXuhao(xuHao);
                         danZhang->type = WeiZhi;
                         --danZhangNum;
                         cfp->type = SanDaiYi;
@@ -758,7 +758,7 @@ void Player::SanDaiYiAndFeiJi()
                     if(duiZi->type == DuiZi)
                     {
                         for(auto xuHao : duiZi->pokersXuhao)
-                            cfp->AddpokersXuhao(xuHao);
+                            cfp->AddPokersXuhao(xuHao);
                         duiZi->type = WeiZhi;
                         --duiZhiNum;
                         cfp->type = SanDaiYi;
@@ -819,7 +819,7 @@ void Player::zhijieChuPai()
                     return;
                 }
                 else {
-                    xuanZePai.AddpokersXuhao(*(shouPai.begin()));
+                    xuanZePai.AddPokersXuhao(*(shouPai.begin()));
                     xuanZePai.type = DanZhang;
                     xuanZePai.quanZhi = xuanZePai.pokerQuanZhi.begin()->first;
                     //拆牌了！要重新分析牌
@@ -845,5 +845,538 @@ void Player::zhijieChuPai()
     return;
 }
 
+void Player::genYouFangPai()
+{
+    if(game.zuiHou != game.diZhu && game.ShangJia() == game.diZhu)
+    {
+        return; //上家为地主，但最后出牌方为友方，则不出牌
+    }
+    for (auto cfp : chaiFenPai)
+    {
+        //查找相应牌
+        if(cfp->type == game.zuiHou->daChuPai.type
+                &&  cfp->yuanSuNum == game.zuiHou->daChuPai.yuanSuNum
+                &&  cfp->quanZhi > game.zuiHou->daChuPai.quanZhi)
+        {
+            daChuPai = *cfp;
+            break;
+        }
+    }
+    if(chaiFenPai.size() >2 && xuanZePai.quanZhi > 14)
+        xuanZePai.Clear();  //手牌数大于2，并且所选择的牌权值大于14（A)，则不出牌
+    return;
+}
 
+void Player::genDiFangPai()
+{
+    auto zuiHouChuPai = game.zuiHou->daChuPai;//地方出牌
 
+    //拆成基本牌
+    ClearChaiFenPai();
+    FenXiChaiFenZuHe();
+    sort(chaiFenPai.begin(), chaiFenPai.end(), CompareMyself);
+
+    for(auto cfp : chaiFenPai)
+    {
+        if(cfp->type == zuiHouChuPai.type
+                && cfp->yuanSuNum == zuiHouChuPai.yuanSuNum
+                && cfp->quanZhi > cfp->quanZhi)
+        {
+            xuanZePai = *cfp;
+            return;
+        }
+    }
+
+    //需要拆牌
+    switch (zuiHouChuPai.type){
+    case DanZhang:  //敌方出的是单牌
+        XuYaoDanZhang();
+        break;
+    case DuiZi:
+        XuYaoDuiZi();
+        break;
+    case ShunZi:
+        XuYaoShunZi();
+        break;
+    case SanTiao:
+        break;
+    case SanDaiYi:
+        XuYaoSanDaiYi();
+    case FeiJi:     //飞机，需要组合
+        XuYaoFeiji();
+        break;
+    default:
+        break;
+    }
+
+    if(xuanZePai.yuanSuNum)
+        return;
+    //敌方剩一张牌，或有适合的炸弹，就出炸弹
+    if(zuiHouChuPai.yuanSuNum > 3 || zuiHouChuPai.quanZhi > 14)
+    {
+        for(auto cfp:chaiFenPai)
+        {
+            if(cfp->type == ZhaDan)
+            {
+                if(game.zuiHou->daChuPai.type == ZhaDan     //如果别人最后出牌为炸弹
+                        && cfp->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //且自己的炸弹不大于对方时，
+                    continue;   //不能选择改牌
+                xuanZePai = *cfp;
+                return;
+            }
+        }
+    }
+}
+
+void Player::XuYaoDanZhang()
+{
+    auto zuiHouChuPai = game.zuiHou->daChuPai;//敌方出牌
+
+    for (auto mem : chaiFenPai){
+        if (mem->type == DanZhang && mem->yuanSuNum > 5){//首先,拆单顺数量大于5的
+            if (mem->pokerQuanZhi.begin()->first > zuiHouChuPai.quanZhi){
+                xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                xuanZePai.quanZhi = mem->pokerQuanZhi.begin()->first;
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+            else if (mem->pokerQuanZhi.rbegin()->first > zuiHouChuPai.quanZhi){
+                xuanZePai.AddPokersXuhao(*(mem->pokersXuhao.rbegin()));
+                xuanZePai.quanZhi = mem->quanZhi;
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+    for (auto mem : chaiFenPai){
+        if (mem->type == SanTiao){//其次,拆三条
+            if (mem->pokerQuanZhi.begin()->first > zuiHouChuPai.quanZhi){
+                xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                xuanZePai.quanZhi = mem->pokerQuanZhi.begin()->first;
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+    for (auto mem : chaiFenPai){
+        if (mem->type == DuiZi){//再者,拆对子
+            if (mem->pokerQuanZhi.begin()->first > zuiHouChuPai.quanZhi){
+                xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                xuanZePai.quanZhi = mem->pokerQuanZhi.begin()->first;
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+}
+
+void Player::XuYaoDuiZi()
+{
+    auto zuiHouChuPai = game.zuiHou->daChuPai;//敌方出牌
+
+    for (auto mem : chaiFenPai){
+        if (mem->type == SanTiao){//拆三条
+            if (mem->pokerQuanZhi.begin()->first > zuiHouChuPai.quanZhi){
+                auto b = mem->pokersXuhao.begin();
+                for (int i = 0; i < 2; ++i)
+                    xuanZePai.AddPokersXuhao(*b++);
+                xuanZePai.quanZhi = mem->pokerQuanZhi.begin()->first;
+                xuanZePai.type = DuiZi;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+    for (auto mem : chaiFenPai){
+        int i = 0, m = 0;
+        if (mem->type == SanShun){//拆三顺
+            if (mem->pokerQuanZhi.begin()->first > zuiHouChuPai.quanZhi){
+                auto b = mem->pokersXuhao.begin();
+                for (int i = 0; i < 2; ++i)
+                    xuanZePai.AddPokersXuhao(*b++);
+                xuanZePai.quanZhi = mem->pokerQuanZhi.begin()->first;
+                xuanZePai.type = DuiZi;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+            else if (mem->pokerQuanZhi.rbegin()->first > zuiHouChuPai.quanZhi){
+                xuanZePai.AddPokersXuhao(*(mem->pokersXuhao.rbegin()));
+                xuanZePai.quanZhi = mem->quanZhi;
+                xuanZePai.type = DuiZi;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+}
+
+void Player::XuYaoShunZi()
+{
+    auto zuiHouChuPai = game.zuiHou->daChuPai;//敌方出牌
+
+    for (auto mem : chaiFenPai){
+        if (mem->type == DanZhang &&
+                mem->quanZhi > zuiHouChuPai.quanZhi &&
+                mem->yuanSuNum > zuiHouChuPai.yuanSuNum){//拆更长的单顺
+            if (mem->yuanSuNum - (mem->quanZhi - zuiHouChuPai.quanZhi) >= zuiHouChuPai.yuanSuNum){
+                //长单顺是从短单顺的开始的元素或更小的元素开始的
+                for (int i = zuiHouChuPai.quanZhi - zuiHouChuPai.yuanSuNum + 2, j = 0;
+                     j < zuiHouChuPai.yuanSuNum; ++j)
+                    xuanZePai.AddPokersXuhao(FindXuHao(mem->pokersXuhao, i + j));
+                xuanZePai.quanZhi = zuiHouChuPai.quanZhi + 1;
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+            else{//长单顺的开始元素比短单顺的开始元素大
+                int i = 0;
+                auto b = mem->pokersXuhao.begin();
+                for (; i < zuiHouChuPai.yuanSuNum; ++i, ++b)
+                    xuanZePai.AddPokersXuhao(*b);
+                xuanZePai.quanZhi = PokersZuHe::ZhuanQuanZhi(*--b);
+                xuanZePai.type = DanZhang;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+}
+
+void Player::XuYaoSanDaiYi()
+{
+    auto b = chaiFenPai.begin();
+    for (; b != chaiFenPai.end(); ++b){//查找比对方三张相同牌的牌面大的三条
+        if ((*b)->type == SanTiao && (*b)->quanZhi > game.zuiHou->daChuPai.quanZhi){
+            break;
+        }
+    }
+    if (b == chaiFenPai.end())//如果没有
+        return;//跳出
+    if (game.zuiHou->daChuPai.yuanSuNum == 4){//最后出牌为三带一张
+        if (chaiFenPai[0]->type == DanZhang){//有单牌
+            for (auto m : chaiFenPai[0]->pokersXuhao)
+                (*b)->AddPokersXuhao(m);
+            (*b)->type = SanDaiYi;
+            chaiFenPai[0]->type = WeiZhi;
+            xuanZePai = **b;
+            return;
+        }
+        else{//需要拆牌
+            for (auto mem : chaiFenPai){
+                if (mem->type == DanZhang && mem->yuanSuNum > 5){//首先,拆单顺数量大于5的
+                    xuanZePai = **b;
+                    xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                    xuanZePai.type = SanDaiYi;
+                    ClearChaiFenPai();//拆牌了，一定要清空
+                    return;
+                }
+            }
+            for (auto mem : chaiFenPai){
+                if (mem->type == SanTiao && mem != *b && mem->quanZhi < 14){//其次,拆三条
+                    xuanZePai = **b;
+                    xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                    xuanZePai.type = SanDaiYi;
+                    ClearChaiFenPai();//拆牌了，一定要清空
+                    return;
+                }
+            }
+            for (auto mem : chaiFenPai){
+                if (mem->type == DuiZi && mem->quanZhi < 14){//再者,拆对子
+                    xuanZePai = **b;
+                    xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                    xuanZePai.type = SanDaiYi;
+                    ClearChaiFenPai();//拆牌了，一定要清空
+                    return;
+                }
+            }
+        }
+    }
+    else{//三带一对
+        for (auto mem : chaiFenPai){//先找对子
+            if (mem->type == DuiZi && mem->quanZhi < 14){
+                for (auto m : mem->pokersXuhao)
+                    (*b)->AddPokersXuhao(m);
+                (*b)->type = SanDaiYi;
+                mem->type = WeiZhi;
+                xuanZePai = **b;
+                return;
+            }
+        }
+        for (auto mem : chaiFenPai){
+            if (mem->type == SanTiao && mem != *b && mem->quanZhi < 14){//其次,拆三条
+                xuanZePai = **b;
+                for (int i = 0; i < 3; ++i)
+                    xuanZePai.AddPokersXuhao(*mem->pokersXuhao.begin());
+                xuanZePai.type = SanDaiYi;
+                ClearChaiFenPai();//拆牌了，一定要清空
+                return;
+            }
+        }
+    }
+}
+
+void Player::XuYaoFeiji()
+{
+    ClearChaiFenPai();
+    FenXiChaiFenZuHe();
+    sort(chaiFenPai.begin(), chaiFenPai.end(), CompareMyself);
+
+    int wing = 0,//翅膀类型
+            n = 0;//单顺中三张牌的个数
+    for (auto mem : game.zuiHou->daChuPai.pokerQuanZhi){
+        if (mem.second == 3)
+            ++n;
+    }
+    if (game.zuiHou->daChuPai.yuanSuNum == 5 * n)//飞机翅膀为对子
+        wing = 2;
+    else{//飞机翅膀为单张
+        while (game.zuiHou->daChuPai.yuanSuNum != 4 * n)
+            --n;
+        wing = 1;
+    }
+    auto b = chaiFenPai.begin();
+    for (; b != chaiFenPai.end(); ++b){
+        if ((*b)->type == SanShun &&
+                (*b)->yuanSuNum == 3 * n &&
+                (*b)->quanZhi > game.zuiHou->daChuPai.quanZhi)
+            break;
+    }
+    if (b == chaiFenPai.end())
+        return;
+    int yuanSuNum = 0;
+    for (auto mem : chaiFenPai){
+        if (mem->type == (wing == 1 ? DanZhang : DuiZi))
+            ++yuanSuNum;
+    }
+    if (yuanSuNum < n)
+        return;
+    for (auto mem : chaiFenPai){
+        if (mem->type == (wing == 1 ? DanZhang : DuiZi)){
+            for (auto m : mem->pokersXuhao)
+                (*b)->AddPokersXuhao(m);
+            mem->type = WeiZhi;
+            --n;
+        }
+        if (!n)
+            break;
+    }
+    (*b)->type = FeiJi;
+    xuanZePai = **b;
+    return;
+}
+
+bool Player::WanJiaChuPai()
+{
+    if(!XuanPaiGuiDing())
+    {
+        xuanZePai.Clear();
+        return false;
+    }
+
+    return DaChuPaiAndClear();
+}
+
+bool Player::XuanPaiGuiDing()
+{
+    if(game.zuiHou && game.zuiHou->daChuPai.yuanSuNum != xuanZePai.yuanSuNum
+            && xuanZePai.yuanSuNum != 4 && xuanZePai.yuanSuNum != 2)
+        return false;
+
+    xuanZePai.type = WeiZhi;
+    FenXiXuanPai();//分析所选牌的类型及权值
+
+    if (xuanZePai.type == WeiZhi)//所选牌不符合规定
+        return false;
+
+    if (game.zuiHou){
+        if (xuanZePai.type == ZhaDan &&
+                (game.zuiHou->daChuPai.type != ZhaDan ||
+                 xuanZePai.quanZhi > game.zuiHou->daChuPai.quanZhi))
+            return true;
+        if (xuanZePai.type != game.zuiHou->daChuPai.type ||
+                xuanZePai.yuanSuNum != game.zuiHou->daChuPai.yuanSuNum)//类型不符或数量不符
+            return false;
+        if (xuanZePai.quanZhi <= game.zuiHou->daChuPai.quanZhi)//选牌不大于上家牌
+            return false;
+    }
+    return true;
+}
+
+void Player::FenXiXuanPai()
+{
+    int NumMax = 0; //同牌面真的最大数量
+    int QuanZhiMax = 0; //最大数量的最大权值
+    //判断是否为王炸
+    if (xuanZePai.yuanSuNum == 2 &&
+            xuanZePai.pokerQuanZhi.find(16) != xuanZePai.pokerQuanZhi.end() &&
+            xuanZePai.pokerQuanZhi.find(17) != xuanZePai.pokerQuanZhi.end()){
+        xuanZePai.type = ZhaDan;
+        xuanZePai.quanZhi = 17;
+        return;
+    }
+    //找出相同牌面的最大数量，和最大权值
+    for (auto mem : xuanZePai.pokerQuanZhi){
+        if (mem.second >= NumMax && mem.first > QuanZhiMax){
+            NumMax = mem.second;
+            QuanZhiMax = mem.first;
+        }
+    }
+    //根据牌面相同的最大数量判断类型
+    switch (NumMax){
+    case 4:
+        if (xuanZePai.yuanSuNum == 4){//炸弹
+            xuanZePai.type = ZhaDan;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 6){//四带两张
+            xuanZePai.type = SiDaiEr;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 8){//四带两对
+            for (auto mem : xuanZePai.pokerQuanZhi){
+                if (mem.second != 2 && mem.second != 4)//牌面不合规
+                    return;
+            }
+            xuanZePai.type = SiDaiEr;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        return;//牌面不合规
+    case 3:
+    {
+        if (xuanZePai.yuanSuNum == 3){//三条
+            xuanZePai.type = SanTiao;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 4){//三带一张
+            xuanZePai.type = SanDaiYi;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 5){//三带两张
+            for (auto mem : xuanZePai.pokerQuanZhi){
+                if (mem.second != 3 && mem.second != 2)
+                    return;
+            }
+            xuanZePai.type = SanDaiYi;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        int begin = 0, n = 0;
+        for (auto mem : xuanZePai.pokerQuanZhi){//判断连续的3张牌面的最大数量
+            if (mem.second == 3){
+                if (!begin || begin == mem.first)
+                    ++n;
+                if (!begin)
+                    begin = mem.first;
+                if (begin != mem.first && n == 1){
+                    n = 1;
+                    begin = mem.first;
+                }
+                ++begin;
+            }
+        }
+        if (xuanZePai.yuanSuNum == 3 * n){//三顺
+            xuanZePai.type = SanShun;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 4 * n){//飞机带单张的翅膀
+            xuanZePai.type = FeiJi;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum == 5 * n){//飞机带对子翅膀
+            for (auto mem : xuanZePai.pokerQuanZhi){
+                if (mem.second != 2 && mem.second != 3)//牌不合规
+                    return;
+            }
+            xuanZePai.type = FeiJi;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        return;//牌不合规
+    }
+    case 2:
+        if (xuanZePai.yuanSuNum == 2){//一对
+            xuanZePai.type = DuiZi;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        if (xuanZePai.yuanSuNum >= 6 && !(xuanZePai.yuanSuNum % 2)){//连对
+            int begin = 0;
+            for (auto mem : xuanZePai.pokerQuanZhi){//确定牌是连续的，并且都是成对的
+                if (!begin)
+                    begin = mem.first;
+                if (begin++ != mem.first || mem.second != 2)//牌不符合规定
+                    return;
+            }
+            xuanZePai.type = ShuangShun;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        return;//牌不符合规定
+    case 1:
+        if (xuanZePai.yuanSuNum == 1){//单张
+            xuanZePai.type = DanZhang;
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+        else if (xuanZePai.yuanSuNum >= 5){//判断是否为顺子
+            int begin = 0;
+            for (auto mem : xuanZePai.pokerQuanZhi){
+                if (!begin)
+                    begin = mem.first;
+                if (begin++ != mem.first || mem.first >= 15)//牌不是连续的或者带了2及以上的牌
+                    return;
+            }
+            xuanZePai.type = ShunZi;//单顺
+            xuanZePai.quanZhi = QuanZhiMax;
+            return;
+        }
+    default://下落，不符合规定
+        return;
+    }
+
+}
+
+bool Player::DaChuPaiAndClear()
+{
+    daChuPai = xuanZePai;//把选牌放入出牌区：打出选牌
+    bool needclear = true;//本次出牌是否为拆牌，需要更新分析牌堆
+    for (auto b = chaiFenPai.begin(); b != chaiFenPai.end(); ++b){
+        if ((*b)->type == xuanZePai.type &&
+                (*b)->quanZhi == xuanZePai.quanZhi &&
+                (*b)->yuanSuNum == xuanZePai.yuanSuNum){//不是拆牌
+            delete (*b);
+            chaiFenPai.erase(b);
+            needclear = false;//不需要清空
+            break;
+        }
+    }
+    if (needclear)//需要清空，下次出牌要重新分析
+        ClearChaiFenPai();
+
+    for (auto mem : xuanZePai.pokersXuhao){
+        shouPai.erase(mem);//从手牌中删除打出牌
+    }
+    xuanZePai.Clear();//清空选牌区
+    return true;
+}
+
+bool Player::AiChuPai()
+{
+    if (xuanZePai.yuanSuNum == 0){//电脑选牌区为空，说明不出
+        buChu = true;
+        return false;
+    }
+    //否则正常打出
+    return DaChuPaiAndClear();
+}
