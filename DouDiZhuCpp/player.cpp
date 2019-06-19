@@ -54,8 +54,11 @@ void Player::AiXuanPai()
 {
     if(chaiFenPai.empty())
     {
-
+        FenXiChaiFenZuHe();
     }
+    SanDaiYiAndFeiJi();
+    DeleteWeiZhi();
+
 }
 
 //拆分手牌牌型并组成基本牌集合
@@ -154,12 +157,16 @@ void Player::FenXiChaiFenZuHe()
         //当权值_数量 集合中存在元素时
         while (exist && quanZhi_shuLiang.size())
         {
-            begin = n = 0;
+            begin = 0;
+            n = 0;
 
-            //遍历 权值_数量 集合中
+            //遍历 权值_数量 集合
             for(auto b = quanZhi_shuLiang.begin(); b != quanZhi_shuLiang.end(); ++b)
             {
                 //跳过数目为0的元素
+                //begin表示当前还未成型的 顺子 的最后1张牌的权值
+                //n 表示当前还未成型的 顺子 已达到多少张牌
+                //b 表示当前遍历所到位置
                 if(b->second > 0)
                 {
                     if(!begin)
@@ -174,39 +181,49 @@ void Player::FenXiChaiFenZuHe()
 
                     ++begin;
                 }
-                //如果存在牌数等于5张
+
+
+                //如果存在顺子的 牌数等于5张
                 if(n == 5)
                 {
-                    auto p = b;
-                    int first = p->first - 4; //顺子中第一个
+                    auto p = b; //p:当前迭代器所在位置（当前所遍历到的位置）
 
                     //创建 顺子 牌型对象“顺子”
                     PokersZuHe *shunZi = new PokersZuHe(ShunZi, p->first);
 
                     //向 "顺子" 中加入这张牌
-                    for(; first <= p->first; ++first)
+                    //shunZiFirst:顺子中第1张牌
+                    for(int shunZiFirst = p->first - 4; shunZiFirst <= p->first; ++shunZiFirst)
                     {
-                        shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,first));
-                        --quanZhi_shuLiang[first];  //减一
+                        shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,shunZiFirst));
+                        --quanZhi_shuLiang[shunZiFirst];  //对应牌在 权值_集合 中的数目减一
                     }
+
+                    //将对象 "顺子" 压入 拆分牌 集合
                     chaiFenPai.push_back(shunZi);
                     exist = true;
                     break;   //从开始重新查找
                 }
 
                 //连续的牌面数量小于5个，重新计数；或者已经到集合末尾仍然数量小于5个
-                auto end = quanZhi_shuLiang.end();
-                if(begin - 1 != b->first || b== --end)
+                if(n<5)
                 {
-                    if(b->second > 0)
+                    auto end = quanZhi_shuLiang.end();
+                    //begin - 1 != b->first : 最后1张牌的权值 不等于 当前遍历所在位置的权值
+                    if(begin - 1 != b->first || b == --end)
                     {
-                        begin = b->first;
-                        ++begin;
-                        n = 1;
-                    }
-                    else {
-                        begin = n = 0;
-                        exist = false;
+                        if(b->second > 0)
+                        {
+                            begin = b->first;
+                            ++begin;
+                            n = 1;
+                        }
+                        else
+                        {
+                            begin = 0;
+                            n = 0;
+                            exist = false;
+                        }
                     }
                 }
             }
@@ -236,8 +253,55 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
+
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
+        //如果顺子中有可以对接更长的顺子；或者两个顺子相同，组合成双顺
+        for(auto sunZhi1 : chaiFenPai)
+        {
+            if(sunZhi1->type == ShunZi)    //顺子1
+            {
+                for(auto sunZhi2 : chaiFenPai)
+                {
+                    if(sunZhi2->type == ShunZi && sunZhi1 != sunZhi2)        //顺子2，且与顺子1不为同一个
+                    {
+                        if(sunZhi1->quanZhi < sunZhi2->quanZhi)   //顺子1 在 顺子2 前
+                        {
+                            //顺子1的末尾牌等于顺子2的第一张牌则可以拼接
+                            if(sunZhi1->quanZhi == sunZhi2->quanZhi - sunZhi2->yuanSuNum)
+                            {
+                                for(auto xuHao : sunZhi2->pokersXuhao)
+                                    sunZhi1->AddpokersXuhao(xuHao);
+                                sunZhi1->quanZhi = sunZhi2->quanZhi;
+                                sunZhi2->type = WeiZhi;
+                            }
+                        }
+                        else if(sunZhi1->quanZhi > sunZhi2->quanZhi)   //顺子2 在 顺子1 前
+                        {
+                            //顺子2的末尾牌等于顺子1的第一张牌则可以拼接
+                            if(sunZhi2->quanZhi == sunZhi1->quanZhi - sunZhi1->yuanSuNum)
+                            {
+                                for(auto xuHao : sunZhi1->pokersXuhao)
+                                    sunZhi2->AddpokersXuhao(xuHao);
+                                sunZhi2->quanZhi = sunZhi1->quanZhi;
+                                sunZhi1->type = WeiZhi;
+                            }
+                        }
+                        else
+                        {
+                            if(sunZhi1->yuanSuNum == sunZhi2->yuanSuNum)
+                            {
+                                for(auto xuHao : sunZhi2->pokersXuhao)
+                                    sunZhi2->AddpokersXuhao(xuHao);
+                                sunZhi1->type = ShuangShun;
+                                sunZhi2->type = WeiZhi;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         if(quanZhi_shuLiang.empty())
         {
@@ -245,6 +309,148 @@ void Player::FenXiChaiFenZuHe()
             //删除所有 拆分牌 中 未知 类型的牌型
             DeleteWeiZhi();
             sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
+        }
+
+        //双顺，只查找数量大于2的连续牌，并且3个以上相连
+        begin = 0;
+        n = 0;
+        auto last = --quanZhi_shuLiang.end();   //last:权值_数量 集合的最后一个元素
+        //遍历 权值_数量 集合
+        for(auto b = quanZhi_shuLiang.begin(); b != quanZhi_shuLiang.end(); ++b)
+        {
+            if(b->second >= 2)
+            {
+                if(!begin)
+                    begin = b->first;
+                if(begin == b->first)
+                    ++n;
+                ++begin;
+            }
+            if(begin && begin - 1 != b->first || b == last)
+            {
+                //出现与之前不连续的牌，或者已经到了最后
+                if(n >= 3)
+                {
+                    auto p = b;
+                    if(begin - 1 != b->first)
+                        --p;
+                    PokersZuHe *shuangShun = new PokersZuHe(ShuangShun, p->first);
+                    for(int i = n; i>0; --i, --p)
+                    {
+                        for(int j = 0; j < 2; ++j)
+                        {
+                            shuangShun->AddpokersXuhao(FindXuHao(shouPaiFuBen,p->first));
+                            --p->second;
+                        }
+                    }
+                    chaiFenPai.push_back(shuangShun);
+                }
+                if(b->second >= 2)
+                {
+                    n = 1;
+                    begin = b->first;
+                    ++begin;
+                }
+                else {
+                    n = 0;
+                    begin = 0;
+                }
+            }
+        }
+
+        DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
+        //三顺
+        //查找是否有重合的单顺和双顺组合成三顺
+        for(auto danShun : chaiFenPai)
+        {
+            if(danShun -> type == ShunZi)
+            {
+                for(auto shuangShun : chaiFenPai)
+                {
+                    if(shuangShun->type == ShuangShun)
+                    {
+                        if(danShun->quanZhi == shuangShun->quanZhi &&
+                                danShun->yuanSuNum*2 == shuangShun->yuanSuNum)
+                        {
+                            for(auto xuHao:danShun->pokersXuhao)
+                                shuangShun->AddpokersXuhao(xuHao);
+                            shuangShun->type = SanShun;
+                            danShun->type = WeiZhi;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(quanZhi_shuLiang.empty())
+        {
+            //分析集合已空，返回
+            //删除所有 拆分牌 中 未知 类型的牌型
+            DeleteWeiZhi();
+            sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
+        }
+
+        //剩余牌中查找三顺
+        begin = 0;
+        n = 0;
+        last = --quanZhi_shuLiang.end();
+        for (auto b = quanZhi_shuLiang.begin(); b != quanZhi_shuLiang.end(); ++b)
+        {
+            if(b->second == 3)
+            {
+                if(!begin)
+                    begin = b->first;
+                if(begin == b->first)
+                    ++n;
+                ++begin;
+            }
+            if(begin && begin - 1 != b->first || b == last) //出现与之前不连续的,或已到集合最后
+                if (n >= 2)
+                {//存在2组及以上
+                    {
+                        if(n >= 2)  //存在2组级以上
+                        {
+                            auto p = b;
+                            if(begin -1 != b->first)
+                                --p;
+                            PokersZuHe *sanShun = new PokersZuHe(SanShun, p->first);
+                            for(int i = n; i > 0; --i, --p)
+                            {
+                                for(int j = 0; j < 3; ++j)
+                                {
+                                    sanShun->AddpokersXuhao(FindXuHao(shouPaiFuBen,p->first));
+                                    --p->second;
+                                }
+                            }
+                            chaiFenPai.push_back(sanShun);
+                            if(b->second == 3)  //当前分析牌为3张，
+                            {
+                                n = 1;
+                                begin = b->first;
+                                ++b;
+                                ++begin;
+                            }
+                            else {
+                                n = 0;
+                                begin = 0;
+                            }
+                        }
+                    }
+                }
+        }
+
+        //三条
+        for(auto qzsl : quanZhi_shuLiang)
+        {
+            if(qzsl.second == 3)
+            {
+                PokersZuHe *sanTiao = new PokersZuHe(sanTiao, qzsl.first);
+                for(int i=0; i<3; i++)
+                    sanTiao->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
+                quanZhi_shuLiang[qzsl.first] = 0;
+                chaiFenPai.push_back(sanTiao);
+            }
         }
 
         //对子
@@ -275,12 +481,16 @@ void Player::FenXiChaiFenZuHe()
             quanZhi_shuLiang[qzsl.first] = 0;
             chaiFenPai.push_back(danZhang);
         }
+
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
+
         DeleteWeiZhi();
         sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
     }
+
 }
+
 
 //删除 权值_集合 中数量为零的元素
 void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
@@ -430,6 +640,28 @@ void Player::DeleteWeiZhi()
             b = chaiFenPai.erase(b);
         }else {
             ++b;
+        }
+    }
+}
+
+//从分析牌中组合三带一和飞机
+void Player::SanDaiYiAndFeiJi()
+{
+    int n;
+    int duiZhiNum = 0;
+    int danZhangNum = 0;
+    for(auto cfp : chaiFenPai)
+    {
+        if(cfp->type == DanZhang)
+            ++danZhangNum;
+        else if(cfp->type == DuiZi)
+            ++duiZhiNum;
+    }
+    for (auto cfp : chaiFenPai)
+    {
+        if(cfp->type == sanShun)
+        {
+
         }
     }
 }

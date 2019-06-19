@@ -43,22 +43,22 @@ int Pokers::MoPai()
     return pokers[--shengYu];
 }
 
-int Pokers::QmlBangDing()
-{
-    for(int i=0; i!=54; i++)
-    {
-        for (;;) {
+//int Pokers::QmlBangDing()
+//{
+//    for(int i=0; i!=54; i++)
+//    {
+//        for (;;) {
 
-        }
-    }
+//        }
+//    }
 
-}
+//}
 
-int Pokers::FindXuhao()
-{
-    for (;;) {
+//int Pokers::FindXuhao()
+//{
+//    for (;;) {
 
-    }
-}
+//    }
+//}
 
 

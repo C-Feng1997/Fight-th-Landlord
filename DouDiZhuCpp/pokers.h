@@ -15,8 +15,8 @@ public:
     int MoPai( ); //抹牌
     inline int GetShengYu( ){return shengYu;}
     //    int pokers[54]; //牌编号组
-    int QmlBangDing();
-    int FindXuhao();
+//    int QmlBangDing();
+//    int FindXuhao();
 private:
     int pokers[54]; //牌编号组--牌堆
     int shengYu;    //剩余牌数量

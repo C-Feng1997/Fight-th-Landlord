@@ -16,6 +16,8 @@ enum Type{
     DanZhang,  //单张
     DuiZi,      //对子
     ShunZi,     //顺子
+    ShuangShun, //双顺
+    SanShun,    //三顺
     SanDaiYi,   //三带一
     FeiJi,      //飞机
     ZhaDan,     //炸弹
