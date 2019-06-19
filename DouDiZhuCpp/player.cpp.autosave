@@ -60,7 +60,7 @@ void Player::AiXuanPai()
     SanDaiYiAndFeiJi();
     DeleteWeiZhi();
     sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
-
+    
     if(chaiFenPai.size() == 2)
     {
         //手数为2，且有合适的炸弹直接出
@@ -70,23 +70,23 @@ void Player::AiXuanPai()
             {
                 if(game.zuiHou != nullptr && //自己是接别人的牌
                         game.zuiHou->daChuPai.type == ZhaDan && //别人最后出的时 炸弹
-                    zhaDan->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //自己的炸弹权值小于对方
+                        zhaDan->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //自己的炸弹权值小于对方
                     continue;   //不能选择改牌
                 xuanZePai = *zhaDan;
             }
         }
     }
-
+    
     if(game.zuiHou == nullptr)
     {
-            zhijieChuPai(); //直接出牌
+        zhijieChuPai(); //直接出牌
     }else if(this != game.diZhu && game.zuiHou != game.diZhu)
     {
         genYouFangPai();//跟友方牌：最后出牌的是友方,并且不是提示
     }else {
         genDiFangPai();//跟敌方的牌或提示
-}
-
+    }
+    
 }
 
 //拆分手牌牌型并组成基本牌集合
@@ -100,7 +100,7 @@ void Player::FenXiChaiFenZuHe()
     {
         std::set<int> shouPaiFuBen(shouPai);    //手牌副本
         std::map<int, int> quanZhi_shuLiang;    //便于分析的 权值_数量 集合
-
+        
         for(auto xuHao : shouPaiFuBen)
         {
             //遍历手牌副本
@@ -108,25 +108,25 @@ void Player::FenXiChaiFenZuHe()
             //然后quanZhi对应数目++；（牌的数目++）
             ++ quanZhi_shuLiang[PokersZuHe::ZhuanQuanZhi(xuHao)];
         }
-
+        
         //存在王炸
         if(quanZhi_shuLiang.find(16) != quanZhi_shuLiang.end()
                 &&  quanZhi_shuLiang.find(17) != quanZhi_shuLiang.end())
         {
             //创建炸弹牌型对象“王炸”
             PokersZuHe *wangZha = new PokersZuHe(ZhaDan, 17);
-
+            
             //在对象“王炸”中加入 牌大王 牌小王
             wangZha->AddpokersXuhao(FindXuHao(shouPaiFuBen,16));
             wangZha->AddpokersXuhao(FindXuHao(shouPaiFuBen,17));
             //从 权值_数量 集合中抹掉 小王 大王
             quanZhi_shuLiang.erase(16);
             quanZhi_shuLiang.erase(17);
-
+            
             //在拆分牌集合中加入 "王炸" 对象
             chaiFenPai.push_back(wangZha);
         }
-
+        
         //遍历 权值_数量 集合
         for(auto qzxh : quanZhi_shuLiang)
         {
@@ -140,27 +140,27 @@ void Player::FenXiChaiFenZuHe()
                     //向 普通炸弹 对象中添加权值为 qzxh.first 的4张牌
                     ptZhanDan->AddpokersXuhao(FindXuHao(shouPaiFuBen,qzxh.first));
                 }
-
+                
                 //在拆分牌集合中加入 “普通炸弹” 对象
                 chaiFenPai.push_back(ptZhanDan);
                 //该权值对应牌的数量在 权值_数量 集合中变为0
                 quanZhi_shuLiang[qzxh.first] = 0;
             }
         }
-
+        
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         //如果存在 牌2
         if(quanZhi_shuLiang.find(15) != quanZhi_shuLiang.end())
         {
             PokersZuHe *two = new PokersZuHe(WeiZhi, 15);
-
+            
             if(quanZhi_shuLiang[15] == 2)
             {
                 //对2
                 two->type = DuiZi;
-
+                
                 //向 two 对象中添加权值为 15 的2张牌
                 two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
                 two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
@@ -171,23 +171,23 @@ void Player::FenXiChaiFenZuHe()
                 //向 two 对象中添加权值为 15 的1张牌
                 two->AddpokersXuhao(FindXuHao(shouPaiFuBen,15));
             }
-
+            
             //从 权值_数量 集合中抹掉 牌2
             quanZhi_shuLiang.erase(15);
             //在拆分牌集合中加入 “对2” 或者 ”单张2“ 对象
             chaiFenPai.push_back(two);
         }
-
+        
         //查找顺子
         int begin, n;
         bool exist = true;
-
+        
         //当权值_数量 集合中存在元素时
         while (exist && quanZhi_shuLiang.size())
         {
             begin = 0;
             n = 0;
-
+            
             //遍历 权值_数量 集合
             for(auto b = quanZhi_shuLiang.begin(); b != quanZhi_shuLiang.end(); ++b)
             {
@@ -206,19 +206,19 @@ void Player::FenXiChaiFenZuHe()
                     {
                         ++n;
                     }
-
+                    
                     ++begin;
                 }
-
-
+                
+                
                 //如果存在顺子的 牌数等于5张
                 if(n == 5)
                 {
                     auto p = b; //p:当前迭代器所在位置（当前所遍历到的位置）
-
+                    
                     //创建 顺子 牌型对象“顺子”
                     PokersZuHe *shunZi = new PokersZuHe(ShunZi, p->first);
-
+                    
                     //向 "顺子" 中加入这张牌
                     //shunZiFirst:顺子中第1张牌
                     for(int shunZiFirst = p->first - 4; shunZiFirst <= p->first; ++shunZiFirst)
@@ -226,13 +226,13 @@ void Player::FenXiChaiFenZuHe()
                         shunZi->AddpokersXuhao(FindXuHao(shouPaiFuBen,shunZiFirst));
                         --quanZhi_shuLiang[shunZiFirst];  //对应牌在 权值_集合 中的数目减一
                     }
-
+                    
                     //将对象 "顺子" 压入 拆分牌 集合
                     chaiFenPai.push_back(shunZi);
                     exist = true;
                     break;   //从开始重新查找
                 }
-
+                
                 //连续的牌面数量小于5个，重新计数；或者已经到集合末尾仍然数量小于5个
                 if(n<5)
                 {
@@ -256,10 +256,10 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
-
+        
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         //如果可可能，继续往"顺子"中添加剩余牌
         //遍历 拆分牌 集合
         for(auto cfp:chaiFenPai)
@@ -269,7 +269,7 @@ void Player::FenXiChaiFenZuHe()
                 //遍历 权值_数量 集合
                 for(auto qzsl : quanZhi_shuLiang)
                 {
-
+                    
                     if (qzsl.second > 0 && qzsl.first == cfp->quanZhi + 1) {
                         //剩余牌中还有比当前 顺子 最大大1的牌
                         cfp->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
@@ -281,10 +281,10 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
-
+        
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         //如果顺子中有可以对接更长的顺子；或者两个顺子相同，组合成双顺
         for(auto sunZhi1 : chaiFenPai)
         {
@@ -330,7 +330,7 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
-
+        
         if(quanZhi_shuLiang.empty())
         {
             //分析集合已空，返回
@@ -338,7 +338,7 @@ void Player::FenXiChaiFenZuHe()
             DeleteWeiZhi();
             sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
         }
-
+        
         //双顺，只查找数量大于2的连续牌，并且3个以上相连
         begin = 0;
         n = 0;
@@ -385,9 +385,9 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
-
+        
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         //三顺
         //查找是否有重合的单顺和双顺组合成三顺
         for(auto danShun : chaiFenPai)
@@ -410,7 +410,7 @@ void Player::FenXiChaiFenZuHe()
                 }
             }
         }
-
+        
         if(quanZhi_shuLiang.empty())
         {
             //分析集合已空，返回
@@ -418,7 +418,7 @@ void Player::FenXiChaiFenZuHe()
             DeleteWeiZhi();
             sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
         }
-
+        
         //剩余牌中查找三顺
         begin = 0;
         n = 0;
@@ -467,7 +467,7 @@ void Player::FenXiChaiFenZuHe()
                     }
                 }
         }
-
+        
         //三条
         for(auto qzsl : quanZhi_shuLiang)
         {
@@ -480,24 +480,24 @@ void Player::FenXiChaiFenZuHe()
                 chaiFenPai.push_back(sanTiao);
             }
         }
-
+        
         //对子
         for(auto qzsl:quanZhi_shuLiang)
         {
             if(qzsl.second == 2)
             {
                 PokersZuHe *duiZhi = new PokersZuHe(DuiZi, qzsl.first);
-
+                
                 duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
                 duiZhi->AddpokersXuhao(FindXuHao(shouPaiFuBen, qzsl.first));
-
+                
                 quanZhi_shuLiang[qzsl.first] = 0;
                 chaiFenPai.push_back(duiZhi);
             }
         }
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         //单牌
         for(auto qzsl : quanZhi_shuLiang)
         {
@@ -509,21 +509,21 @@ void Player::FenXiChaiFenZuHe()
             quanZhi_shuLiang[qzsl.first] = 0;
             chaiFenPai.push_back(danZhang);
         }
-
+        
         //删除 权值_集合 中数量为零的元素
         DeleteZeroQuanZhi_shuLiang(quanZhi_shuLiang);
-
+        
         DeleteWeiZhi();
         sort(chaiFenPai.begin(),chaiFenPai.end(),CompareMyself);
     }
-
+    
 }
 
 
 //删除 权值_集合 中数量为零的元素
 void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
 {
-
+    
     /*
      * 关于设置notComplete的原因，删除元素后再从此处位置遍历会出现问题，需要从头再遍历
      * 测试代码：
@@ -532,13 +532,13 @@ void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
      * using namespace std;
      * //void DeleteZeroQuanZhi_ShuLiang(std::map<int, int> &quanZhi_ShuangLiang)
      * {
-
+     
     //    bool notComplete = true;
     //    cout << "-------in delete------"<<endl;
     //    while (notComplete)
     //    {
     //        notComplete = false;
-
+    
     //        for (auto b = quanZhi_ShuangLiang.begin();b != quanZhi_ShuangLiang.end(); ++b)
     //        {
     //            cout << b->first << "-----" << b->second << endl;
@@ -551,12 +551,12 @@ void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
     //        }
     //    }
     //}
-
+    
     void DeleteZeroQuanZhi_ShuLiang(std::map<int, int> &quanZhi_ShuangLiang)
     {
         cout << "-------in delete------"<<endl;
-
-
+        
+        
         for (auto b = quanZhi_ShuangLiang.begin();b != quanZhi_ShuangLiang.end(); ++b)
         {
             cout << b->first << "-----" << b->second << endl;
@@ -566,8 +566,8 @@ void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
             }
         }
     }
-
-
+    
+    
     int main()
     {
         map<int,int>  qzsl{ {1,5}, {2,6}, {5,0}, {9,4}, {10,0}, {7,7}};
@@ -589,7 +589,7 @@ void Player::DeleteZeroQuanZhi_shuLiang(std::map<int, int> &quanZhi_shuLiang)
     while (notComplete)
     {
         notComplete = false;
-
+        
         //遍历 权值_数量 集合
         for (auto b = quanZhi_shuLiang.begin(); b != quanZhi_shuLiang.end(); ++b)
         {
@@ -613,8 +613,8 @@ int Player::FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi)
     {
         throw std::runtime_error("权值没有在副本中");
     }else
-
-
+        
+        
         //若 权值等于16(小王) 且 在手牌副本中通过序号找到了小王
         if(quanZhi == 16 && shouPaiFuBen.find(52) != shouPaiFuBen.end())
         {
@@ -623,8 +623,8 @@ int Player::FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi)
             //返回52(小王）
             return 52;
         }else
-
-
+            
+            
             //若 权值等于17(大王) 且 在手牌副本中通过序号找到了大王
             if(quanZhi == 17 && shouPaiFuBen.find(53) != shouPaiFuBen.end())
             {
@@ -633,14 +633,14 @@ int Player::FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi)
                 //返回53(大王）
                 return 53;
             }else{
-
-
+                
+                
                 //若 权值等于非王的牌
                 for(int i = (quanZhi - 3)*4, j=0; j<4; ++j)
                 {
                     //将权值转为序号
                     int xuHao = i+j;
-
+                    
                     //若在手牌副本中找到了该序号
                     if(shouPaiFuBen.find(xuHao) != shouPai.end())
                     {
@@ -650,7 +650,7 @@ int Player::FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi)
                         return xuHao;
                     }
                 }
-
+                
                 throw std::runtime_error("权值没有在副本中");
             }
 }
@@ -778,11 +778,11 @@ void Player::zhijieChuPai()
         xuanZePai = *chaiFenPai[0];
         return;
     }
-
+    
     if(chaiFenPai.size() == 2)
     {
         //剩两手牌，出最大的那组
-
+        
         //“查看”其它玩家手牌，只为分析剩余牌中的最大的
         int maxNum = 0;
         Player *p = game.ShangJia();
@@ -800,7 +800,7 @@ void Player::zhijieChuPai()
                 return;
             }
         }
-
+        
         //否则，打出牌类型最大的牌
         xuanZePai = *chaiFenPai[1];
         return;
@@ -843,6 +843,11 @@ void Player::zhijieChuPai()
     }
     xuanZePai = *chaiFenPai[0];
     return;
+}
+
+void Player::genYouFangPai()
+{
+    if(game.zuiHou != game.diZhu && game)
 }
 
 

@@ -29,6 +29,13 @@ public:
     //给一个权值，从手牌副本中找到相应的序号，然后从集合中删除并返回该序号；若未找到或无效则返回-1
     int FindXuHao(std::set<int> &shouPaiFuBen, int quanZhi);
     void DeleteWeiZhi();    //从拆分牌中删除所有未知类型的牌型
+    void SanDaiYiAndFeiJi();    //从分析牌中组合三带一和飞机
+    void zhijieChuPai();        //直接出牌
+    void genYouFangPai();       //跟右方牌
+    void genDiFangPai();        //跟敌方牌
+    void ShangJia();            //上家
+    void XiaJia();              //下家
+
 private:
     Game &game;                             //游戏对象
     bool buChu;                             //不出标志

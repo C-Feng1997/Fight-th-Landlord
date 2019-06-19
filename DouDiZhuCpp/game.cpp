@@ -101,4 +101,36 @@ void Game::ChuPai()
     zuiHou->AiXuanPai();
 }
 
+//获取当前玩家的上家
+Player *Game::ShangJia()
+{
+    int i;
+    for(i=0; i<3; ++i)
+    {
+        if(player[i] == dangQian)
+            break;
+    }
+    return player[(i+2) %3];
+}
+
+//获取当前玩家的下家
+Player *Game::XiaJia()
+{
+    return player[XiJiaNum()];
+}
+
+int Game::XiJiaNum()
+{
+    int i;
+    for(i=0; i<3; ++i)
+    {
+        if(player[i] == dangQian)
+            if(player[i] == dangQian)
+                break;
+    }
+    return (i+1) % 3;
+}
+
+
+
 
