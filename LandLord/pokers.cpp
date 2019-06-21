@@ -11,7 +11,7 @@ Pokers::Pokers()
         pokers[bianHao] = bianHao;  //将牌编号组内元素依次初始化为0-53
 
     }
-
+    shengYu = 54;
 
     XiPai();
 }

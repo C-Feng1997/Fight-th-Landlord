@@ -24,6 +24,9 @@ void Game::GameStart()
     GameChuShi();
     FaPai();
     status = JIAODIZHU;
+    JiaoDiZhu();
+    status = FADIZHUPAI;
+    FaDiZhuPai();
 }
 
 //游戏初始化
@@ -43,18 +46,21 @@ void Game::GameChuShi()
 
     //洗牌后进入叫地主阶段
     status = JIAODIZHU;
+    //    JiaoDiZhu();
 }
 
 //发牌
 //模拟实物发牌
 void Game::FaPai()
 {
-    std::cout << "----faPaiDui-----" << std::endl;
-    std::cout << faPaiDui.GetShengYu() << std::endl;
-//    for(auto me:faPaiDui.pokers)
-//        std::cout << me << std::endl;
+    //    std::cout << "----faPaiDui-----" << std::endl;
+    //    std::cout << faPaiDui.GetShengYu() << std::endl;
+    //    for(auto me:faPaiDui.pokers)
+    //        std::cout << me << std::endl;
 
     //当发牌堆的牌大于3张时分别给3个玩家依次轮流发牌
+    //    for(auto me: player[0]->shouPai)
+    //        std::cout << me << std::endl;
     while(faPaiDui.GetShengYu() > 3 && faPaiDui.GetShengYu() <= 54)
     {
         player[0]->DePai(faPaiDui.MoPai());
@@ -62,15 +68,15 @@ void Game::FaPai()
         player[2]->DePai(faPaiDui.MoPai());
     }
 
-    std::cout << "----player[0]-----" << std::endl;
-    for(auto me: player[0]->shouPai)
-        std::cout << me << std::endl;
-    std::cout << "----player[1]-----" << std::endl;
-    for(auto me: player[1]->shouPai)
-        std::cout << me << std::endl;
-    std::cout << "----player[2]-----" << std::endl;
-    for(auto me: player[2]->shouPai)
-        std::cout << me << std::endl;
+    //        std::cout << "----player[0]-----" << std::endl;
+    //        for(auto me: player[0]->shouPai)
+    //            std::cout << me << std::endl;
+    //    std::cout << "----player[1]-----" << std::endl;
+    //    for(auto me: player[1]->shouPai)
+    //        std::cout << me << std::endl;
+    //    std::cout << "----player[2]-----" << std::endl;
+    //    for(auto me: player[2]->shouPai)
+    //        std::cout << me << std::endl;
     //将发牌堆最后3张牌放入地主牌区
     while(faPaiDui.GetShengYu() <= 3 && faPaiDui.GetShengYu() > 0)
     {
@@ -85,7 +91,8 @@ void Game::JiaoDiZhu()
 {
     firstJiaoDiZhu=QRandomGenerator::global()->bounded(0,2);
     status = JIAODIZHU;
-    dangQian = player[firstJiaoDiZhu];
+    //    dangQian = player[firstJiaoDiZhu];
+    dangQian = player[0];
     diZhu = dangQian;
     zuiHou = nullptr;
     if(diZhu)
@@ -98,11 +105,26 @@ void Game::JiaoDiZhu()
 void Game::FaDiZhuPai()
 {
     //将地主牌区的牌发给地主
+    //    std::cout<<"------------------opai---------------"<<std::endl;
+    //    for(auto m:player[0]->shouPai )
+    //        std::cout<<m<<std::endl;
+    //    std::cout<<"------------------opai---------------"<<std::endl;
+
     for(auto poker : diZhuPaiQu)
     {
         diZhu->DePai(poker);
     }
 
+
+    //     std::cout<<"------------------opai---------------"<<std::endl;
+    //    for(auto poker : diZhuPaiQu)
+    //    {
+    //         std::cout<<poker<<std::endl;
+    //    }
+    //    std::cout<<"------------------opai---------------"<<std::endl;
+    //    for(auto m:player[0]->shouPai )
+    //        std::cout<<m<<std::endl;
+    //    std::cout<<"------------------opai---------------"<<std::endl;
     //未实现伪代码：地主牌由背面到正面显示
 
     status = CHUPAI;

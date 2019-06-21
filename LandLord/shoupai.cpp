@@ -16,7 +16,7 @@ QList<int> ShouPai::ShouPaiQml()
     }
 
 //    std::cout << "-----------------"<<std::endl;
-    for(auto s:shouPaiQml)
+//    for(auto s:shouPaiQml)
 //        std::cout<< s << std::endl;
     return shouPaiQml;
 }

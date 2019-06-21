@@ -66,15 +66,14 @@ macx {
 }
 
 DISTFILES += \
-    qml/MainInterface.qml \
-    qml/MainPage.qml \
     qml/MenuButton.qml \
-    qml/AboutInterface.qml \
     qml/Setting.qml \
-    qml/FightOption.qml \
     qml/Gametimer.qml \
-    qml/MyButton.qml \
-    qml/Gameing.qml
+    qml/AboutScene.qml \
+    qml/VideoShow.qml \
+    qml/MainScene.qml \
+    qml/StartScene.qml \
+    qml/Playing.qml
 
 HEADERS += \
     pokers.h \

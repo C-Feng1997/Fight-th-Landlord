@@ -11,14 +11,16 @@
         <file>images/icons/button.png</file>
         <file>images/icons/back1.png</file>
         <file>images/icons/guanYuPage.JPG</file>
-        <file>images/scene/guanYuScene.jpg</file>
         <file>images/scene/startScene.jpg</file>
         <file>images/scene/mainScene.png</file>
-        <file>images/scene/gameingScene.png</file>
         <file>images/touxiang/touxaing2.png</file>
         <file>images/touxiang/touxiang1.png</file>
         <file>images/touxiang/touxaing3.png</file>
         <file>images/touxiang/girl.png</file>
         <file>images/pukepai/paibei-1.png</file>
+        <file>images/scene/aboutScene.jpg</file>
+        <file>images/touxiang/touxiang0.png</file>
+        <file>images/touxiang/renwuming.png</file>
+        <file>images/scene/gamingScene.png</file>
     </qresource>
 </RCC>

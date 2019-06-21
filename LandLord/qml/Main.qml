@@ -4,42 +4,37 @@ import QtQuick.Controls 2.5
 
 GameWindow {
     id: gameWindow
-    property alias mybutton: mybutton
-    property alias gametime: gametime
     screenWidth: 960
     screenHeight: 640
 
     activeScene: scene
 
-    MainInterface{
-        id:mainInterface
+    VideoShow{
+        id:videoShow
     }
 
     //主页面
-    MainPage{
-        id: mainPage
+    MainScene{
+        id: mainScene
+    }
+    StartScene{
+        id:startScene
+    }
+    Playing{
+        id:playing
+        Gametimer{
+            id:gametimer
+        }
     }
 
-    //开始
-//    FightOption{
-//        id: fightOption
-//    }
-
-
     //关于
-    AboutInterface{
-        id: aboutInterface
+    AboutScene{
+        id: aboutScene
     }
 
     //设置
     Setting {
         id: setting
-    }
-    MyButton{
-        id:mybutton
-    }
-    Gametimer{
-        id:gametime
     }
     Scene {
         anchors.fill: parent
@@ -50,7 +45,7 @@ GameWindow {
         StackView {
             id: stackView
             anchors.fill: parent
-            initialItem: mainInterface
+            initialItem: videoShow
         }
     }
 }

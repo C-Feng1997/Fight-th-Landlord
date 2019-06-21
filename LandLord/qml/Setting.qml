@@ -6,9 +6,9 @@ import QtQuick.Dialogs 1.2 as QQD
 
 Item {
     property alias dialog: dialog
-    property alias switch1: switch1
+//    property alias switch1: switch1
 
-
+    id: setting
     QQD.Dialog {
         id:dialog
         title: "设置"
@@ -27,26 +27,12 @@ Item {
                     onPressedChanged: {
                         //如果checked为false，则不播放音乐
                         if(!checked)
-                            mainPage.bgMusic.stop()
+                            mainScene.bgMusic.stop()
                         else
                             //如果checked为true，则开始播放媒体。
-                            mainPage.bgMusic.play()
+                            mainScene.bgMusic.play()
                     }
                 }
-                //                Button{
-                //                    id: control
-                //                    Text {
-                //                        id: text
-                //                        text: qsTr("关于")
-                //                        color: "Chocolate"
-                //                        anchors.centerIn: parent
-                //                        font.pixelSize: 40
-                //                    }
-                //                    background: Image {
-                //                        id: guanyu
-                //                        source: "qrc:/mainInterface/button/button.png"
-                //                    }
-
             }
         }
 

@@ -3,8 +3,8 @@ import QtQuick 2.0
 Rectangle{
     id: button
 
-    width: parent.width / 5
-    height: parent.height / 7
+//    width: parent.width / 5
+//    height: parent.height / 7
 //    width:parent.width / 7
 //    height:parent.height / 7
     color: "transparent"
