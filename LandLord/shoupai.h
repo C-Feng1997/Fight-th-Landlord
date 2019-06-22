@@ -4,12 +4,13 @@
 #include <QObject>
 #include "player.h"
 #include  "game.h"
+#include <QJsonDocument>
 
 class ShouPai : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList <int> ShouPaiQml READ ShouPaiQml)
-//    Q_PROPERTY(QList <int> DiZhuPaiQml READ DiZhuPaiQml)
+    Q_PROPERTY(QList <int> DiZhuPaiQml READ DiZhuPaiQml)
 public:
     ShouPai();
     QList<int> ShouPaiQml();

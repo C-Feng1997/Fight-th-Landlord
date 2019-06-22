@@ -9,7 +9,7 @@ Item {
     property alias re: re
     Canvas{
         id:re
-        x:5
+        x:80
         y:0
         width: 160
         height: 50
@@ -29,7 +29,7 @@ Item {
             color: "red"
             style: Text.Sunken
             styleColor:"white"
-            font.pixelSize: 30
+            font.pixelSize: 50
         }
         Timer{
             id:countDown

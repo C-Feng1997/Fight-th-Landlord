@@ -30,14 +30,14 @@ Scene {
             }
             Image {
                 id: pageImage
-                scale: 0.8
+                scale: 0.7
                 anchors.bottomMargin: 109
                 anchors.leftMargin: 97
                 anchors.rightMargin: 99
                 anchors.topMargin: 208
                 anchors.fill: parent
                 anchors.top: banBen.bottom
-                source: "qrc:/images/icons/guanYuPage.JPG"
+                source: "qrc:/images/icons/guanYuPage.png"
             }
 
             Button{

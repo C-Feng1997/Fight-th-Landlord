@@ -11,8 +11,9 @@ Item{
         //玩家头像
         Image{
             id:touxiangImage
-            width: 100
-            height: 100
+//            width: 100
+//            height: 100
+            scale: 0.7
 
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
@@ -23,8 +24,9 @@ Item{
 
         Image {
             id: nameImage
-            width: 100
-            height: 50
+//            width: 100
+//            height: 50
+            scale: 0.7
             source: "qrc:/images/icons/Button2.png"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 22
@@ -33,12 +35,12 @@ Item{
             Text {
                 id: text
                 text: qsTr("玩家")
-                x:22
-                y:5
                 style:Text.Sunken
-                styleColor: "white"
+//                styleColor: "white"
+                color: "white"
                 font.pointSize: 20
-                anchors.bottomMargin: 0.3 * height
+                anchors.centerIn: parent
+//                anchors.bottomMargin: 0.3 * height
             }
         }
         //“开始游戏“按钮
@@ -46,7 +48,7 @@ Item{
             id:kaishibutton
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom:parent.bottom
-            anchors.bottomMargin: 180
+            anchors.bottomMargin: 240
             Text {
                 id: kaishitext
                 style:Text.Sunken
@@ -55,7 +57,7 @@ Item{
                 font.pointSize: 20
                 anchors.centerIn: parent
             }
-            scale: 0.7
+            scale: 1
 
             background:Image {
                 source: "qrc:/images/icons/button.png"

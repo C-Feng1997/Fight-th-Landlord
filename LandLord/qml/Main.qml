@@ -7,6 +7,7 @@ GameWindow {
     screenWidth: 960
     screenHeight: 640
 
+
     activeScene: scene
 
     VideoShow{

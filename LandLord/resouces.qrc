@@ -10,7 +10,6 @@
         <file>images/icons/Button2.png</file>
         <file>images/icons/button.png</file>
         <file>images/icons/back1.png</file>
-        <file>images/icons/guanYuPage.JPG</file>
         <file>images/scene/startScene.jpg</file>
         <file>images/scene/mainScene.png</file>
         <file>images/touxiang/touxaing2.png</file>
@@ -22,5 +21,8 @@
         <file>images/touxiang/touxiang0.png</file>
         <file>images/touxiang/renwuming.png</file>
         <file>images/scene/gamingScene.png</file>
+        <file>images/icons/close.png</file>
+        <file>images/icons/dizhuButton.bmp</file>
+        <file>images/icons/guanYuPage.png</file>
     </qresource>
 </RCC>

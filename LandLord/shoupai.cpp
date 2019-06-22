@@ -15,8 +15,15 @@ QList<int> ShouPai::ShouPaiQml()
         shouPaiQml.push_back(s);
     }
 
-//    std::cout << "-----------------"<<std::endl;
-//    for(auto s:shouPaiQml)
-//        std::cout<< s << std::endl;
+    //    std::cout << "-----------------"<<std::endl;
+    //    for(auto s:shouPaiQml)
+    //        std::cout<< s << std::endl;
     return shouPaiQml;
+}
+
+QList<int> ShouPai::DiZhuPaiQml()
+{
+    for(auto s :m_game->diZhuPaiQu)
+        diZhuPaiQml.push_back(s);
+    return diZhuPaiQml;
 }

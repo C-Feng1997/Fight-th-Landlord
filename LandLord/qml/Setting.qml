@@ -6,9 +6,11 @@ import QtQuick.Dialogs 1.2 as QQD
 
 Item {
     property alias dialog: dialog
-//    property alias switch1: switch1
+    //    property alias switch1: switch1
 
     id: setting
+    width: 400
+    height: 200
     QQD.Dialog {
         id:dialog
         title: "设置"
@@ -17,11 +19,23 @@ Item {
             color: "lightskyblue"
             implicitWidth: 400
             implicitHeight: 200
+            Image {
+                id: image
+                anchors.right: parent.right
+                anchors.top: parent.top
+                source: "qrc:/images/icons/close.png"
+                MouseArea{
+                    id: closeMouseArea
+                    anchors.fill: parent
+                }
+            }
             ColumnLayout{
                 anchors.centerIn: parent
                 Switch{
                     id: switch1
+                    scale: 1.8
                     text: qsTr("音乐")
+                    font.pixelSize: 32
                     //如果选中控件，则此属性为真。默认值为false。
                     checked: false
                     onPressedChanged: {
@@ -35,16 +49,5 @@ Item {
                 }
             }
         }
-
     }
 }
-
-
-
-
-
-
-
-
-
-
