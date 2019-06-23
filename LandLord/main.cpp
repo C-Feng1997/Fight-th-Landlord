@@ -2,7 +2,7 @@
 #include <FelgoApplication>
 
 #include <QQmlApplicationEngine>
-#include "shoupai.h"
+#include "controlqml.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
 
     // QQmlApplicationEngine is the preferred way to start qml projects since Qt 5.2
     // if you have older projects using Qt App wizards from previous QtCreator versions than 3.1, please change them to QQmlApplicationEngine
-    qmlRegisterType<ShouPai>("ShouPai",1,0,"ShouPai");
+    qmlRegisterType<ControlQml>("ControlQml",1,0,"ControlQml");
+
     QQmlApplicationEngine engine;
 
     felgo.initialize(&engine);

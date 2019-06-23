@@ -46,7 +46,8 @@ GameWindow {
         StackView {
             id: stackView
             anchors.fill: parent
-            initialItem: videoShow
+//            initialItem: videoShow
+            initialItem: mainScene
         }
     }
 }

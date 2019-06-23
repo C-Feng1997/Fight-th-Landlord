@@ -16,17 +16,27 @@ Item {
         title: "设置"
 
         contentItem: Rectangle {
-            color: "lightskyblue"
-            implicitWidth: 400
-            implicitHeight: 200
+            color: "transparent"
+            implicitWidth: 600
+            implicitHeight: 300
+            Image {
+                id: settingScene
+                anchors.fill: parent
+                source: "qrc:/images/scene/settingScene.jpg"
+            }
+
             Image {
                 id: image
                 anchors.right: parent.right
                 anchors.top: parent.top
+                scale: 0.6
                 source: "qrc:/images/icons/close.png"
                 MouseArea{
                     id: closeMouseArea
                     anchors.fill: parent
+                    onClicked: {
+                        dialog.close()
+                    }
                 }
             }
             ColumnLayout{

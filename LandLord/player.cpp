@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <algorithm>
+#include <iostream>
 
 //Player::Player()
 //{
@@ -20,7 +21,7 @@ Player::~Player()
 
 Player::Player(Game &gameNow) : game(gameNow), songXiaJiaZou(false),buChu(false)
 {
-//    std::vector<int> ShouPaiQml();
+    //    std::vector<int> ShouPaiQml();
 }
 
 //开始新的一局游戏，做初始化的操作
@@ -67,6 +68,7 @@ bool Player::CompareMyself(PokersZuHe *p1, PokersZuHe *p2)
 //AI选牌
 void Player::AiXuanPai()
 {
+//    std::cerr << "AIXuanPai" << std::endl;
     //是否需要重新分析手牌
     if(chaiFenPai.empty())
     {
@@ -1362,9 +1364,11 @@ void Player::FenXiXuanPai()
 
 }
 
+
 bool Player::DaChuPaiAndClear()
 {
     daChuPai = xuanZePai;//把选牌放入出牌区：打出选牌
+//    std::cout << "AI出牌" << std::endl;
     bool needclear = true;//本次出牌是否为拆牌，需要更新分析牌堆
     for (auto b = chaiFenPai.begin(); b != chaiFenPai.end(); ++b){
         if ((*b)->type == xuanZePai.type &&
@@ -1388,6 +1392,7 @@ bool Player::DaChuPaiAndClear()
 
 bool Player::AiChuPai()
 {
+    std::cerr << "AIChuPai" << std::endl;
     if (xuanZePai.yuanSuNum == 0){//电脑选牌区为空，说明不出
         buChu = true;
         return false;

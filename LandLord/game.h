@@ -26,6 +26,7 @@ class Game
 {
     friend class Player;
     friend class ShouPai;
+    friend class ControlQml;
 public:
     Game();
     ~Game();

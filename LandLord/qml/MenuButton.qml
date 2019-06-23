@@ -21,7 +21,7 @@ Rectangle{
         Text {
             id: text
             anchors.centerIn: parent
-            font.pixelSize: 40
+            font.pixelSize: 60
             color: "Linen"
             opacity: 1
         }

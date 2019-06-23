@@ -9,9 +9,10 @@
 //发牌堆类
 class Pokers
 {
-    friend class ShouPai;
+
     friend class Player;
     friend class Game;
+    friend class ControlQml;
 public:
     Pokers( );
     void XiPai( );      //洗牌

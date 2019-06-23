@@ -51,9 +51,8 @@ Scene {
     //显示在界面左侧的人物
     Image {
         id: girl
-//        x: parent.width * 0.02
-        width: parent.width * 0.45
-        height: parent.height * 0.86
+        width: parent.width * 9 / 22
+        height: parent.height * 43 / 47
         anchors.topMargin: 60
         anchors.leftMargin:50
         anchors.bottom: parent.bottom

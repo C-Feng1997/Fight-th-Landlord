@@ -1,0 +1,29 @@
+{"frames": {
+
+"bg03.jpg":
+{
+	"frame": {"x":1,"y":1,"w":1224,"h":918},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1224,"h":918},
+	"sourceSize": {"w":1224,"h":918}
+},
+"bg04.jpg":
+{
+	"frame": {"x":1,"y":921,"w":1224,"h":918},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1224,"h":918},
+	"sourceSize": {"w":1224,"h":918}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "bgImage-2.png",
+	"format": "RGBA8888",
+	"size": {"w":1226,"h":1840},
+	"scale": "1",
+	"related_multi_packs": [ "bgImage-1.json", "bgImage-3.json" ],
+	"smartupdate": "$TexturePacker:SmartUpdate:9007083d90a65084f69027199eecf098:0913a64c469b688e9775e6a3de5656a4:e20bebc0f763340e45f91a7e39a24b15$"
+}
+}

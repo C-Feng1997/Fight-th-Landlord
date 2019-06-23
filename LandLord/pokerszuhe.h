@@ -30,9 +30,10 @@ enum Type{
 class PokersZuHe
 {
 
-    friend class ShouPai;
+
     friend class Player;
     friend class Game;
+    friend class ControlQml;
 public:
     PokersZuHe();
     PokersZuHe(Type typeNow, int quanZhiNow);
@@ -48,12 +49,7 @@ public:
     //    牌大王为17;
     static int ZhuanQuanZhi(int xuHao);
 
-//    std::map<int, int>pokerQuanZhi;    //3-17权值集合
-//    std::set<int> pokersXuhao;    //0-53(序号)组成的集合，主要用于方便画面显示
-//    Type type;  //牌型类型（单牌、对子等等）
-//    int quanZhi;    //权值
-//    int yuanSuNum;  //此结构元素数量（牌张数量）
-private:
+
     std::map<int, int>pokerQuanZhi;    //3-17权值集合
     std::set<int> pokersXuhao;    //0-53(序号)组成的集合，主要用于方便画面显示
     Type type;  //牌型类型（单牌、对子等等）

@@ -1,6 +1,6 @@
 # allows to add DEPLOYMENTFOLDERS and links to the Felgo library and QtCreator auto-completion
 CONFIG += felgo
-
+CONFIG += c++11
 # uncomment this line to add the Live Client Module and use live reloading with your custom C++ code
 # for the remaining steps to build a custom Live Code Reload app see here: https://felgo.com/custom-code-reload-app/
 # CONFIG += felgo-live
@@ -40,11 +40,11 @@ RESOURCES += \ #    resources.qrc # uncomment for publishing
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    controlqml.cpp \
     pokers.cpp \
     pokerszuhe.cpp \
     game.cpp \
-    player.cpp \
-    shoupai.cpp
+    player.cpp
 
 
 android {
@@ -70,14 +70,16 @@ DISTFILES += \
     qml/Setting.qml \
     qml/Gametimer.qml \
     qml/AboutScene.qml \
+    qml/Sprites.qml \
     qml/VideoShow.qml \
     qml/MainScene.qml \
     qml/StartScene.qml \
     qml/Playing.qml
 
 HEADERS += \
+    controlqml.h \
     pokers.h \
     pokerszuhe.h \
     game.h \
-    player.h \
-    shoupai.h
+    player.h
+LIBS += -ljsoncpp

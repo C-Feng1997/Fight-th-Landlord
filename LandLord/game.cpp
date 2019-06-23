@@ -53,14 +53,6 @@ void Game::GameChuShi()
 //模拟实物发牌
 void Game::FaPai()
 {
-    //    std::cout << "----faPaiDui-----" << std::endl;
-    //    std::cout << faPaiDui.GetShengYu() << std::endl;
-    //    for(auto me:faPaiDui.pokers)
-    //        std::cout << me << std::endl;
-
-    //当发牌堆的牌大于3张时分别给3个玩家依次轮流发牌
-    //    for(auto me: player[0]->shouPai)
-    //        std::cout << me << std::endl;
     while(faPaiDui.GetShengYu() > 3 && faPaiDui.GetShengYu() <= 54)
     {
         player[0]->DePai(faPaiDui.MoPai());
@@ -68,15 +60,6 @@ void Game::FaPai()
         player[2]->DePai(faPaiDui.MoPai());
     }
 
-    //        std::cout << "----player[0]-----" << std::endl;
-    //        for(auto me: player[0]->shouPai)
-    //            std::cout << me << std::endl;
-    //    std::cout << "----player[1]-----" << std::endl;
-    //    for(auto me: player[1]->shouPai)
-    //        std::cout << me << std::endl;
-    //    std::cout << "----player[2]-----" << std::endl;
-    //    for(auto me: player[2]->shouPai)
-    //        std::cout << me << std::endl;
     //将发牌堆最后3张牌放入地主牌区
     while(faPaiDui.GetShengYu() <= 3 && faPaiDui.GetShengYu() > 0)
     {
@@ -132,6 +115,7 @@ void Game::FaDiZhuPai()
 
 void Game::ChuPai()
 {
+    std::cout << "chuPai" << std::endl;
     if(zuiHou == dangQian)
     {
         //没有玩家出牌比当前玩家所出的牌大，
@@ -150,6 +134,7 @@ void Game::ChuPai()
         dangQian->buChu = false;
         dangQian->daChuPai.Clear();
     }
+    //刷新
 
     if(dangQian == player[0])
     {
@@ -168,11 +153,12 @@ void Game::ChuPai()
         }
     }else {
         //当前出牌方为电脑;
+        std::cerr << "AI" << std::endl;
         dangQian->AiXuanPai();
         if (dangQian->AiChuPai())
             zuiHou = dangQian;
-        //		if (dangQian->daChuPai.type == ZhaDan)//炸弹
-        //        {}
+        //        for(auto s: dangQian->daChuPai.pokersXuhao)
+        std::cerr << dangQian->shouPai.size() << std::endl;
     }
 
     if(zuiHou->shouPai.empty())
