@@ -1,0 +1,28 @@
+{"frames": {
+
+"guang2.png":
+{
+	"frame": {"x":368,"y":1,"w":28,"h":29},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":29},
+	"sourceSize": {"w":28,"h":29}
+},
+"guang3.png":
+{
+	"frame": {"x":1,"y":1,"w":365,"h":363},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":365,"h":363},
+	"sourceSize": {"w":365,"h":363}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "guang.png",
+	"format": "RGBA8888",
+	"size": {"w":397,"h":365},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3e960e551f31a266d024ca75d99732c7:89282261e166786c546dfb397385b4d2:1499d676b9c5c564fa67204ae50337c4$"
+}
+}

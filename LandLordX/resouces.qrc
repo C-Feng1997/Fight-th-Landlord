@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/audio/vedio.mp4</file>
+        <file>images/audio/bgMusic.mp3</file>
+        <file>images/icons/back.png</file>
+        <file>images/icons/set.png</file>
+        <file>images/icons/chupai.bmp</file>
+        <file>images/icons/guopai.bmp</file>
+        <file>images/icons/banBen.JPG</file>
+        <file>images/icons/Button2.png</file>
+        <file>images/icons/button.png</file>
+        <file>images/icons/back1.png</file>
+        <file>images/scene/startScene.jpg</file>
+        <file>images/scene/mainScene.png</file>
+        <file>images/touxiang/touxiang1.png</file>
+        <file>images/touxiang/touxaing3.png</file>
+        <file>images/touxiang/girl.png</file>
+        <file>images/pukepai/paibei-1.png</file>
+        <file>images/scene/aboutScene.jpg</file>
+        <file>images/touxiang/touxiang0.png</file>
+        <file>images/scene/gamingScene.png</file>
+        <file>images/icons/close.png</file>
+        <file>images/icons/dizhuButton.bmp</file>
+        <file>images/icons/guanYuPage.png</file>
+        <file>images/icons/up.png</file>
+        <file>images/icons/down.png</file>
+        <file>images/scene/settingScene.jpg</file>
+        <file>images/audio/mainSound.mp3</file>
+        <file>images/touxiang/touxiang8.png</file>
+        <file>images/touxiang/touxiang9.png</file>
+        <file>images/touxiang/touxiang11.png</file>
+        <file>images/touxiang/touxiang7.png</file>
+        <file>images/touxiang/touxiang6.png</file>
+        <file>images/touxiang/touxiang10.png</file>
+        <file>images/touxiang/touxiang4.png</file>
+        <file>images/touxiang/touxiang5.png</file>
+        <file>images/touxiang/touxaing2.png</file>
+    </qresource>
+</RCC>
