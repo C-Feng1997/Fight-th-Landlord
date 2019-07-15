@@ -164,7 +164,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[0].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite1
         width: parent.width/14.5
@@ -177,7 +176,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[1].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite2
         width: parent.width/14.5
@@ -190,7 +188,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[2].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite3
         width: parent.width/14.5
@@ -203,7 +200,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[3].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite4
         width: parent.width/14.5
@@ -216,7 +212,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[4].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite5
         width: parent.width/14.5
@@ -229,7 +224,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[5].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite6
         width: parent.width/14.5
@@ -242,7 +236,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[6].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite7
         width: parent.width/14.5
@@ -255,7 +248,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[7].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite8
         width: parent.width/14.5
@@ -268,7 +260,6 @@ Item {
         source: "../assets/pokersImage.json"
         frameNames: cpQu0[8].daChuPai0+".png"
     }
-
     TexturePackerAnimatedSprite {
         id: player0sprite9
         width: parent.width/14.5
@@ -526,9 +517,6 @@ Item {
         frameNames: cpQu2[9].daChuPai2+".png"
     }
 
-
-
-
     //手牌区
 
     TexturePackerAnimatedSprite {
@@ -719,7 +707,6 @@ Item {
         }
     }
 
-
     TexturePackerAnimatedSprite {
         id: sprite6
         property var xuHao: shouPai[6].shouPai
@@ -750,7 +737,6 @@ Item {
             }
         }
     }
-
 
     TexturePackerAnimatedSprite {
         id: sprite7
@@ -813,7 +799,6 @@ Item {
             }
         }
     }
-
 
     TexturePackerAnimatedSprite {
         id: sprite9
@@ -1126,34 +1111,6 @@ Item {
         }
     }
 
-    //    Image {
-    //        id: sprite19
-    //        property int xuHao: shouPai[19].shouPai
-    //        width: parent.width/10
-    //        height: parent.height/4.2
-    //        visible: true
-    //        anchors.left: parent.left
-    //        anchors.leftMargin: parent.width/4.6 + 55*19
-    //        anchors.bottom:  parent.bottom
-    //        anchors.bottomMargin: 35
-    //        source: "../assets/pokersImage.json"+xuHao+".png"
-    //        MouseArea {
-    //            anchors.fill: parent
-    //            property int flag: 1
-    //            onClicked:
-    //            {
-    //                if(flag == 1){
-    //                    parent.anchors.bottomMargin = parent.anchors.bottomMargin+50;
-    //                    controlQml.setXuanZePai(parent.xuHao);
-    //                    flag = 0;
-    //                }else if(flag == 0)
-    //                {
-    //                    parent.anchors.bottomMargin =parent.anchors.bottomMargin-50;
-    //                    controlQml.rmXuanZePai(parent.xuHao);
-    //                    flag = 1;
-    //                }
-    //            }
-    //        }
     TexturePackerAnimatedSprite {
         id: sprite19
         property int xuHao: shouPai[19].shouPai

@@ -122,17 +122,6 @@ void Game::ChuPai()
     {
         //当前玩家为人
         printShouPai(0);
-        //        std::cout << "请输入你选择的手牌"<<std::endl;
-        //        int x;
-        //        while(std::cin >> x)
-        //        {
-        //            player[0]->xuanZePai.AddPokersXuhao(x);
-        //        }
-
-//        std::vector<int> vec;
-//        for(auto c : player[0]->shouPai)
-//            vec.push_back(c);
-//        player[0]->xuanZePai.AddPokersXuhao(vec[vec.size()-1]);
 
         if(dangQian->xuanZePai.yuanSuNum
                 && dangQian->WanJiaChuPai())
@@ -225,12 +214,16 @@ void Game::GameOver()
     if (diZhu->shouPai.size()){//农民胜利
         if (player[0] != diZhu)
             IsPeopleWin = true;
+        m_jieGuo = 1;
         std::cout << "农民胜利" << std::endl;
+
     }
     else{//地主胜利
         std::cout << "地主胜利" <<std::endl;
         if (player[0] == diZhu)
             IsPeopleWin = true;
+        m_jieGuo = 2;
+
     }
 
 //    GameStart();

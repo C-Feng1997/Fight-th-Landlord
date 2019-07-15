@@ -18,6 +18,8 @@ Item{
     property var cpQu0:JSON.parse(sprites.controlQml.showChuPaiQu0())
     property var cpQu1:JSON.parse(sprites.controlQml.showChuPaiQu1())
     property var cpQu2:JSON.parse(sprites.controlQml.showChuPaiQu2())
+    property var czcpQu:JSON.parse(sprites.controlQml.chongZhiChuPaiQu())
+    property var czspQu:JSON.parse(sprites.controlQml.chongZhiShouPaiQu())
 
     BackgroundMusic{
         id: bgMusic1
@@ -43,6 +45,24 @@ Item{
 
     Gametimer{
         id:gametimer
+    }
+
+    //win
+    Image {
+        id: win
+        visible: false
+        source: "qrc:/images/icons/win.png"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
+    //fail
+    Image {
+        id: fail
+        visible: false
+        source: "qrc:/images/icons/fail.png"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     //玩家头像”我“
@@ -258,8 +278,78 @@ Item{
                 onClicked:{
                     sprites.controlQml.buChu();
 
+                    buchuBotton0.visible = true;
+                    buchuBotton1.visible = false;
+                    buchuBotton2.visible = false;
+
+                    sprites.cpQu1 = JSON.parse(sprites.controlQml.chongZhiChuPaiQu());
+                    sprites.cpQu2 = JSON.parse(sprites.controlQml.chongZhiChuPaiQu());
+                    jieShu();
+                    pc1ChuPai.start();
+                    pc2ChuPai.start();
                 }
             }
+        }
+    }
+
+
+    //“我”不出牌按钮
+    Button{
+        id:buchuBotton0
+        visible: false
+        anchors.right:parent.right
+        anchors.rightMargin: parent.width/2.5
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: parent.height/3
+        scale:0.4
+        Text {
+            text: qsTr("不出")
+            font.pointSize: 20
+            color: "white"
+            anchors.centerIn: parent
+        }
+        background:Image {
+            source: "qrc:/images/icons/dizhuButton.bmp"
+
+        }
+    }
+    //"李四"不出牌按钮
+    Button{
+        id:buchuBotton1
+        visible: false
+        anchors.right:parent.right
+        anchors.rightMargin: parent.width/20
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: parent.height/1.7
+        scale:0.4
+        Text {
+            text: qsTr("不出")
+            font.pointSize: 20
+            color: "white"
+            anchors.centerIn: parent
+        }
+        background:Image {
+            source: "qrc:/images/icons/dizhuButton.bmp"
+        }
+    }
+
+    //”张三“不出牌按钮
+    Button{
+        id:buchuBotton2
+        visible: false
+        anchors.left: parent.left
+        anchors.leftMargin: parent.width/20
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin:parent.height/1.7
+        scale:0.4
+        Text {
+            text: qsTr("不出")
+            font.pointSize: 20
+            color: "white"
+            anchors.centerIn: parent
+        }
+        background:Image {
+            source: "qrc:/images/icons/dizhuButton.bmp"
         }
     }
 
@@ -269,7 +359,14 @@ Item{
         repeat: false
         onTriggered: {
             sprites.controlQml.pc1ChuPai();
-            sprites.cpQu1 = JSON.parse(sprites.controlQml.showChuPaiQu1());
+            if(sprites.controlQml.buchuBiaozhi1())
+            {
+                buchuBotton1.visible=true;
+            }else{
+                buchuBotton1.visible = false
+                sprites.cpQu1 = JSON.parse(sprites.controlQml.showChuPaiQu1());
+            }
+            jieShu();
         }
     }
 
@@ -279,18 +376,32 @@ Item{
         repeat: false
         onTriggered: {
             sprites.controlQml.pc2ChuPai();
-            sprites.cpQu2 = JSON.parse(sprites.controlQml.showChuPaiQu2());
+            if(sprites.controlQml.buchuBiaozhi2())
+            {
+                buchuBotton2.visible=true;
+            }else{
+                buchuBotton1.visible = false
+                sprites.cpQu2 = JSON.parse(sprites.controlQml.showChuPaiQu2());
+            }
+            jieShu();
+            buchuBotton0.visible = false;
+            sprites.cpQu0 = JSON.parse(sprites.controlQml.chongZhiChuPaiQu());
         }
     }
-    function readJson(xuHao)
+
+    function jieShu()
     {
-        console.log(shouPai[xuHao].ShouPai)
-        if(shouPai[xuHao].ShouPai){
-            return shouPai[xuHao].ShouPai;
-        }else if(shouPai[xuHao].ShouPai==='0'){
-            return 0;
-        }else{
-            return -1;
+
+        switch ( sprites.controlQml.jieGuo() ) {
+        case 0:
+            ;
+            break;
+        case 1:
+            fail.visible = true;
+            break;
+        case 2:
+            win.visible = true;
+            break;
         }
     }
 
@@ -309,14 +420,20 @@ Item{
             MouseArea{
                 anchors.fill: parent
                 onClicked:{
-                    console.log(readJson(0));
-
+                    //                    console.log(readJson(0));
 
                     sprites.controlQml.chuPai();
+
                     chongZhiShuoPai();
 
                     sprites.shouPai =  JSON.parse(sprites.controlQml.showShouPai());
                     sprites.cpQu0 = JSON.parse(sprites.controlQml.showChuPaiQu0());
+                    buchuBotton1.visible = false;
+                    buchuBotton2.visible = false;
+
+                    sprites.cpQu1 = JSON.parse(sprites.controlQml.chongZhiChuPaiQu());
+                    sprites.cpQu2 = JSON.parse(sprites.controlQml.chongZhiChuPaiQu());
+                    jieShu();
                     pc1ChuPai.start();
                     pc2ChuPai.start();
 
@@ -324,7 +441,6 @@ Item{
             }
         }
     }
-
 
     //设置
     Image {
@@ -693,368 +809,5 @@ Item{
         }
     }
 
-    //    function chongZhiChuPaiQu0(){
-    //        sprites.player0sprite0
-    //    }
-    //    function chongZhiShuoPai(){
-    //        if(sprites.controlQml.showShouPaiNum() === 0)
-    //        {
-    //            sprites.sprite0.frameNames = "";
-    //            sprites.sprite1.frameNames = "";
-    //            sprites.sprite2.frameNames = "";
-    //            sprites.sprite3.frameNames = "";
-    //            sprites.sprite4.frameNames = "";
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===1)
-    //        {
-    //            sprites.sprite1.frameNames = "";
-    //            sprites.sprite2.frameNames = "";
-    //            sprites.sprite3.frameNames = "";
-    //            sprites.sprite4.frameNames = "";
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===2)
-    //        {
-    //            sprites.sprite2.frameNames = "";
-    //            sprites.sprite3.frameNames = "";
-    //            sprites.sprite4.frameNames = "";
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===3)
-    //        {
-    //            sprites.sprite3.frameNames = "";
-    //            sprites.sprite4.frameNames = "";
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===4)
-    //        {
-    //            sprites.sprite4.frameNames = "";
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===5)
-    //        {
-    //            sprites.sprite5.frameNames = "";
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===6)
-    //        {
-    //            sprites.sprite6.frameNames = "";
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===7)
-    //        {
-    //            sprites.sprite7.frameNames = "";
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===8)
-    //        {
-    //            sprites.sprite8.frameNames = "";
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===9)
-    //        {
-    //            sprites.sprite9.frameNames = "";
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===10)
-    //        {
-    //            sprites.sprite10.frameNames = "";
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===11)
-    //        {
-    //            sprites.sprite11.frameNames = "";
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===12)
-    //        {
-    //            sprites.sprite12.frameNames = "";
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===13)
-    //        {
-    //            sprites.sprite13.frameNames = "";
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===14)
-    //        {
-    //            sprites.sprite14.frameNames = "";
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===15)
-    //        {
-    //            sprites.sprite15.frameNames = "";
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===16)
-    //        {
-    //            sprites.sprite16.frameNames = "";
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===17)
-    //        {
-    //            sprites.sprite17.frameNames = "";
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===18)
-    //        {
-    //            sprites.sprite18.frameNames = "";
-    //            sprites.sprite19.frameNames = "";
-    //        }else if(sprites.controlQml.showShouPaiNum()===19)
-    //        {
-    //            sprites.sprite19.frameNames = "";
-    //        }
-    //    }
-
 }
-
-//    function shuaXinShouPai()
-//    {
-//        console.log("shuaxin")
-//        sprites.sprite0.xuHao = sprites.shouPai[0].shouPai;
-//        sprites.sprite1.xuHao = sprites.shouPai[1].shouPai;
-//        sprites.sprite2.xuHao = sprites.shouPai[2].shouPai;
-//        sprites.sprite3.xuHao = sprites.shouPai[3].shouPai;
-//        sprites.sprite4.xuHao = sprites.shouPai[4].shouPai;
-//        sprites.sprite5.xuHao = sprites.shouPai[5].shouPai;
-//        sprites.sprite6.xuHao = sprites.shouPai[6].shouPai;
-//        sprites.sprite7.xuHao = sprites.shouPai[7].shouPai;
-//        sprites.sprite8.xuHao = sprites.shouPai[8].shouPai;
-//        sprites.sprite9.xuHao  = sprites.shouPai[9].shouPai;
-//        sprites.sprite10.xuHao = sprites.shouPai[10].shouPai;
-//        sprites.sprite11.xuHao = sprites.shouPai[11].shouPai;
-//        sprites.sprite12.xuHao = sprites.shouPai[12].shouPai;
-//        sprites.sprite13.xuHao = sprites.shouPai[13].shouPai;
-//        sprites.sprite14.xuHao = sprites.shouPai[14].shouPai;
-//        sprites.sprite15.xuHao = sprites.shouPai[15].shouPai;
-//        sprites.sprite16.xuHao = sprites.shouPai[16].shouPai;
-//        sprites.sprite17.xuHao = sprites.shouPai[17].shouPai;
-//        sprites.sprite18.xuHao = sprites.shouPai[18].shouPai;
-//        sprites.sprite19.xuHao = sprites.shouPai[19].shouPai;
-//        console.log("shuaxin")
-//        console.log(sprites.sprite19);
-//    }
-
-//    function chongZhiShouPai()
-//    {
-//        console.log("chongzhi")
-//        sprites.sprite0 = spriteX;
-//        sprites.sprite1 = spriteX;
-//        sprites.sprite2 = spriteX;
-//        sprites.sprite3 = spriteX;
-//        sprites.sprite4 = spriteX;
-//        sprites.sprite5 = spriteX;
-//        sprites.sprite6 = spriteX;
-//        sprites.sprite7 = spriteX;
-//        sprites.sprite8 = spriteX;
-//        sprites.sprite9 = spriteX;
-//        sprites.sprite11 = spriteX;
-//        sprites.sprite12 = spriteX;
-//        sprites.sprite13 = spriteX;
-//        sprites.sprite14 = spriteX;
-//        sprites.sprite15 = spriteX;
-//        sprites.sprite16 = spriteX;
-//        sprites.sprite17 = spriteX;
-//        sprites.sprite18 = spriteX;
-//        sprites.sprite19 = spriteX;
-//        //        sprites.sprite0.frameNames = "";
-//        //        sprites.sprite1.frameNames = "";
-//        //        sprites.sprite2.frameNames = "";
-//        //        sprites.sprite3.frameNames = "";
-//        //        sprites.sprite4.frameNames = "";
-//        //        sprites.sprite5.frameNames = "";
-//        //        sprites.sprite6.frameNames = "";
-//        //        sprites.sprite7.frameNames = "";
-//        //        sprites.sprite8.frameNames = "";
-//        //        sprites.sprite9.frameNames = "";
-//        //        sprites.sprite10.frameNames = "";
-//        //        sprites.sprite11.frameNames = "";
-//        //        sprites.sprite12.frameNames = "";
-//        //        sprites.sprite13.frameNames = "";
-//        //        sprites.sprite14.frameNames = "";
-//        //        sprites.sprite15.frameNames = "";
-//        //        sprites.sprite16.frameNames = "";
-//        //        sprites.sprite17.frameNames = "";
-//        //        sprites.sprite18.frameNames = "";
-//        //        sprites.sprite19.source = "";
-//        console.log("chongzhi")
-//    }
-
-//}
-
-/*
-    function chongZhiShouPai()
-    {
-                console.log("vvvvv")
-        sprites.sprite0.frameNames = sprites.shouPai[0].shouPai+".png";
-
-        sprites.sprite1.frameNames = sprites.shouPai[1].shouPai+".png";
-        sprites.sprite2.frameNames = sprites.shouPai[2].shouPai+".png";
-        sprites.sprite3.frameNames = sprites.shouPai[3].shouPai+".png";
-        sprites.sprite4.frameNames = sprites.shouPai[4].shouPai+".png";
-        sprites.sprite5.frameNames = sprites.shouPai[5].shouPai+".png";
-        sprites.sprite6.frameNames = sprites.shouPai[6].shouPai+".png";
-        sprites.sprite7.frameNames = sprites.shouPai[7].shouPai+".png";
-        console.log(sprites.shouPai[8].shouPai);
-        sprites.sprite8.frameNames = sprites.shouPai[8].shouPai+".png";
-        sprites.sprite9.frameNames = sprites.shouPai[9].shouPai+".png";
-        sprites.sprite10.frameNames = sprites.shouPai[10].shouPai+".png";
-        sprites.sprite11.frameNames = sprites.shouPai[11].shouPai+".png";
-        sprites.sprite12.frameNames = sprites.shouPai[12].shouPai+".png";
-        sprites.sprite13.frameNames = sprites.shouPai[13].shouPai+".png";
-        sprites.sprite14.frameNames = sprites.shouPai[14].shouPai+".png";
-        sprites.sprite15.frameNames = sprites.shouPai[15].shouPai+".png";
-        sprites.sprite16.frameNames = sprites.shouPai[16].shouPai+".png";
-        sprites.sprite17.frameNames = sprites.shouPai[17].shouPai+".png";
-        sprites.sprite18.frameNames = sprites.shouPai[18].shouPai+".png";
-        sprites.sprite19.frameNames = "";
-        console.log("aaaa")
-        console.log(sprites.sprite19.frameNames);
-        //}
-    }
-    */
 

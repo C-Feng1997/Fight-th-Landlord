@@ -10,28 +10,6 @@ ControlQml::ControlQml()
 {
     m_game = new Game();
     m_game->GameStart();
-//    while(m_game->GameStatus() != JIESHU)
-//    switch (m_game->GameStatus()) {
-//    case WEIKAISHI:
-//        m_game->GameStart();
-//        break;
-
-//    case JIAODIZHU:
-//        m_game->JiaoDiZhu();
-//        break;
-
-//    case FADIZHUPAI:
-//        m_game->FaDiZhuPai();
-//        break;
-
-//    case CHUPAI:
-//        m_game->ChuPai();
-//        break;
-
-//    case JIESHU:
-//        m_game->GameOver();
-//        break;
-//    }
 }
 
 QList<int> ControlQml::ShouPaiQml()
@@ -71,7 +49,6 @@ QString ControlQml::showShouPai()
 
 void ControlQml::setXuanZePai(int xuHao)
 {
-    std::cout << "xuHaoset:"<< xuHao <<std::endl;
     m_game->player[0]->xuanZePai.AddPokersXuhao(xuHao);
 
     shuaXinShouPai();
@@ -80,19 +57,13 @@ void ControlQml::setXuanZePai(int xuHao)
 
 void ControlQml::rmXuanZePai(int xuHao)
 {
-    std::cout << "xuHaorm:"<< xuHao <<std::endl;
     m_game->player[0]->xuanZePai.DeletpokersXuhao(xuHao);
-    //    for(auto xuHao :m_game->player[0]->xuanZePai.pokersXuhao)
-    //    {
 
-    //        std::cout << "pokersrm:"<< xuHao <<std::endl;
-    //    }
     shuaXinShouPai();
 }
 
 void ControlQml::chuPai()
 {
-//    m_game->dangQian = m_game->player[0];
     m_game->ChuPai();
 
     shuaXinShouPai();
@@ -107,7 +78,6 @@ void ControlQml::buChu()
 
 void ControlQml::pc1ChuPai()
 {
-//    m_game->dangQian = m_game->player[1];
     m_game->ChuPai();
 
     shuaXinChuPaiQu1();
@@ -115,10 +85,19 @@ void ControlQml::pc1ChuPai()
 
 void ControlQml::pc2ChuPai()
 {
-//    m_game->dangQian = m_game->player[2];
     m_game->ChuPai();
 
     shuaXinChuPaiQu2();
+}
+
+bool ControlQml::buchuBiaozhi1()
+{
+    return m_game->player[1]->buChu;
+}
+
+bool ControlQml::buchuBiaozhi2()
+{
+    return m_game->player[2]->buChu;
 }
 
 void ControlQml::shuaXinShouPai()
@@ -201,72 +180,94 @@ QString ControlQml::showDiZhuPaiQu()
     {
         Json::Value item;
         item["diZhuPaiQu"] = xuHao;
-        arry.append(item);
+        qmlValue.append(item);
     }
-    qmlValue = arry;
-    //    QString result = QString::fromStdString(qmlValue.toStyledString());
+
     QString result = QString::fromStdString(qmlValue.toStyledString());
-    //    qDebug() << result;
+
     return result;
 }
 
 QString ControlQml::showChuPaiQu0()
 {
     Json::Value qmlValue;
-    Json::Value root;
-    Json::Value arry;
+
     for(auto xuHao :m_game->player[0]->daChuPai.pokersXuhao)
     {
         Json::Value item;
         item["daChuPai0"] = xuHao;
-        arry.append(item);
+        qmlValue.append(item);
     }
-    qmlValue = arry;
-    QString result = QString::fromStdString(qmlValue.toStyledString());
 
-    m_chuPaiQu0 = result;
+    m_chuPaiQu0 = QString::fromStdString(qmlValue.toStyledString());
+
     return m_chuPaiQu0;
 }
 
 QString ControlQml::showChuPaiQu1()
 {
     Json::Value qmlValue;
-    Json::Value root;
-    Json::Value arry;
+
     for(auto xuHao :m_game->player[1]->daChuPai.pokersXuhao)
     {
         Json::Value item;
         item["daChuPai1"] = xuHao;
-        arry.append(item);
-        std::cerr << "chuPai1:" <<std::endl;
-        //        std::cout << xuHao <<std::endl;
+        qmlValue.append(item);
     }
-    qmlValue = arry;
-    QString result = QString::fromStdString(qmlValue.toStyledString());
-    m_chuPaiQu1 = result;
+
+    m_chuPaiQu1 = QString::fromStdString(qmlValue.toStyledString());
     return m_chuPaiQu1;
 }
 
 QString ControlQml::showChuPaiQu2()
 {
     Json::Value qmlValue;
-    Json::Value root;
-    Json::Value arry;
+
     for(auto xuHao :m_game->player[2]->daChuPai.pokersXuhao)
     {
         Json::Value item;
         item["daChuPai2"] = xuHao;
-        arry.append(item);
+        qmlValue.append(item);
     }
-    qmlValue = arry;
-    QString result = QString::fromStdString(qmlValue.toStyledString());
-    m_chuPaiQu2 = result;
+
+    m_chuPaiQu2 = QString::fromStdString(qmlValue.toStyledString());
     return m_chuPaiQu2;
+}
+
+QString ControlQml::chongZhiChuPaiQu()
+{
+    Json::Value qmlValue;
+
+    for(int i=0; i<10; i++)
+    {
+        int xuHao = -1;
+        Json::Value item;
+        item["daChuPai"] = xuHao;
+        qmlValue.append(item);
+    }
+
+    m_chongZhiChuPai = QString::fromStdString(qmlValue.toStyledString());
+    return m_chongZhiChuPai;
+}
+
+QString ControlQml::chongZhiShouPaiQu()
+{
+    Json::Value qmlValue;
+
+    for(int i=0; i<20; i++)
+    {
+        int xuHao = -1;
+        Json::Value item;
+        item["shouPai"] = xuHao;
+        qmlValue.append(item);
+    }
+
+    m_chongZhiShouPai = QString::fromStdString(qmlValue.toStyledString());
+    return m_chongZhiShouPai;
 }
 
 int ControlQml::showShouPaiNum()
 {
-    //    std::cout << m_game->player[0]->shouPai.size() << std::endl;
     return m_game->player[0]->shouPai.size();
 }
 

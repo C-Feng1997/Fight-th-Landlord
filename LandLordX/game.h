@@ -45,7 +45,12 @@ public:
     Status GameStatus();
     void printShouPai(int i);
     void printDaChuPai(int i);
+//    bool win() { m_nongMingWin = true; }
+//    bool fall() { m_diZhuWin = true; }
+
 private:
+    int m_jieGuo = 0;
+
     Status status;      //游戏当前状态
     Pokers faPaiDui;    //发牌堆
     Player *diZhu;      //地主玩家
@@ -54,6 +59,8 @@ private:
     Player *player[3];
     int diZhuPaiQu[3];     //地主牌存放区
     int firstJiaoDiZhu;
+//    bool m_nongMingWin = false;
+//    bool m_diZhuWin = false;
 };
 
 #endif // GAME_H

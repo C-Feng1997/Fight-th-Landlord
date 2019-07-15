@@ -49,7 +49,9 @@ SOURCES += main.cpp \
     pokers.cpp \
     pokerszuhe.cpp \
     game.cpp \
-    player.cpp
+    player.cpp \
+    character.cpp \
+    game1.cpp
 
 
 android {
@@ -87,5 +89,7 @@ HEADERS += \
     pokers.h \
     pokerszuhe.h \
     game.h \
-    player.h
+    player.h \
+    character.h \
+    game1.h
 LIBS += -ljsoncpp

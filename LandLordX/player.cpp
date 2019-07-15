@@ -5,14 +5,6 @@
 #include <algorithm>
 #include <iostream>
 
-//Player::Player()
-//{
-//    buChu = false;
-//    shouPai.clear();
-//    xuanZePai.Clear();
-//    daChuPai.Clear();
-//    ClearChaiFenPai();
-//}
 Player::Player(Game &gameNow) : game(gameNow), songXiaJiaZou(false),buChu(false)
 {
 
@@ -792,165 +784,6 @@ void Player::SanDaiYiAndFeiJi()
     }
 }
 
-//直接出牌
-void Player::zhijieChuPai()
-{
-    if(chaiFenPai.size() == 1)//剩最后一手牌
-    {
-        xuanZePai = *chaiFenPai[0];
-        return;
-    }
-
-    if(chaiFenPai.size() == 2)
-    {
-        //剩两手牌，出最大的那组
-
-        //“查看”其它玩家手牌，只为分析剩余牌中的最大的
-        int maxNum = 0;
-        Player *p = game.ShangJia();
-        if(*p->shouPai.rbegin() > maxNum)
-            maxNum = *p->shouPai.rbegin();
-        p = game.XiaJia();
-        if(*p->shouPai.rbegin() > maxNum)
-            maxNum = *p->shouPai.rbegin();
-        for(auto cfp : chaiFenPai)
-        {
-            //如果手中有比剩余牌还大的一手牌，就先打出该牌
-            if(cfp->quanZhi > PokersZuHe::ZhuanQuanZhi(maxNum))
-            {
-                xuanZePai = *cfp;
-                return;
-            }
-        }
-
-        //否则，打出牌类型最大的牌
-        xuanZePai = *chaiFenPai[1];
-        return;
-    }
-    if(game.XiaJia()->shouPai.size() == 1)  //下家手牌为1
-    {
-        if(this != game.diZhu && game.zuiHou != game.diZhu) //下家为友方
-        {
-            //没试验过下家牌，就打出最小的一张；否则就正常出牌
-            if(!songXiaJiaZou)
-            {
-                if(chaiFenPai[0]->type == DanZhang &&
-                        chaiFenPai[0]->quanZhi == PokersZuHe::ZhuanQuanZhi(*(shouPai.begin())))
-                {
-                    xuanZePai = *chaiFenPai[0];
-                    return;
-                }
-                else {
-                    xuanZePai.AddPokersXuhao(*(shouPai.begin()));
-                    xuanZePai.type = DanZhang;
-                    xuanZePai.quanZhi = xuanZePai.pokerQuanZhi.begin()->first;
-                    //拆牌了！要重新分析牌
-                    ClearChaiFenPai();
-                    return;
-                }
-            }
-        }   else {
-            //下家为地方剩余1牌
-            //未实现
-        }
-    }
-    //正常顺序出牌：(A以上的牌尽量不直接出、炸弹不直接出)
-    //单牌→对子→双顺→单顺→三条、三带一、飞机
-    for (auto mem : chaiFenPai){
-        if ((mem->type == DanZhang || mem->type == DuiZi) &&
-                mem->quanZhi >= 15 || mem->type == ZhaDan)
-            continue;
-        xuanZePai = *mem;
-        return;
-    }
-    xuanZePai = *chaiFenPai[0];
-    return;
-}
-
-void Player::genYouFangPai()
-{
-    if(game.zuiHou != game.diZhu && game.ShangJia() == game.diZhu)
-    {
-        return; //上家为地主，但最后出牌方为友方，则不出牌
-    }
-    for (auto cfp : chaiFenPai)
-    {
-        //查找相应牌
-        if(cfp->type == game.zuiHou->daChuPai.type
-                &&  cfp->yuanSuNum == game.zuiHou->daChuPai.yuanSuNum
-                &&  cfp->quanZhi > game.zuiHou->daChuPai.quanZhi)
-        {
-            daChuPai = *cfp;
-            break;
-        }
-    }
-    if(chaiFenPai.size() >2 && xuanZePai.quanZhi > 14)
-        xuanZePai.Clear();  //手牌数大于2，并且所选择的牌权值大于14（A)，则不出牌
-    return;
-}
-
-void Player::genDiFangPai()
-{
-    auto zuiHouChuPai = game.zuiHou->daChuPai;//地方出牌
-
-    //拆成基本牌
-    ClearChaiFenPai();
-    FenXiChaiFenZuHe();
-    sort(chaiFenPai.begin(), chaiFenPai.end(), CompareMyself);
-
-    for(auto cfp : chaiFenPai)
-    {
-        if(cfp->type == zuiHouChuPai.type
-                && cfp->yuanSuNum == zuiHouChuPai.yuanSuNum
-                && cfp->quanZhi > cfp->quanZhi)
-        {
-            xuanZePai = *cfp;
-            return;
-        }
-    }
-
-    //需要拆牌
-    switch (zuiHouChuPai.type){
-    case DanZhang:  //敌方出的是单牌
-        XuYaoDanZhang();
-        break;
-    case DuiZi:
-        XuYaoDuiZi();
-        break;
-    case ShunZi:
-        XuYaoShunZi();
-        break;
-    case SanTiao:
-        break;
-    case SanDaiYi:
-        XuYaoSanDaiYi();
-    case FeiJi:     //飞机，需要组合
-        XuYaoFeiji();
-        break;
-    default:
-        break;
-    }
-
-    if(xuanZePai.yuanSuNum)
-        return;
-    //敌方剩一张牌，或有适合的炸弹，就出炸弹
-    if(zuiHouChuPai.yuanSuNum > 3 || zuiHouChuPai.quanZhi > 14)
-    {
-        for(auto cfp:chaiFenPai)
-        {
-            if(cfp->type == ZhaDan)
-            {
-                if(game.zuiHou->daChuPai.type == ZhaDan     //如果别人最后出牌为炸弹
-                        && cfp->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //且自己的炸弹不大于对方时，
-                    continue;   //不能选择改牌
-                xuanZePai = *cfp;
-                return;
-            }
-        }
-    }
-    return;
-}
-
 void Player::XuYaoDanZhang()
 {
     auto zuiHouChuPai = game.zuiHou->daChuPai;//敌方出牌
@@ -1370,7 +1203,6 @@ void Player::FenXiXuanPai()
 
 }
 
-
 bool Player::DaChuPaiAndClear()
 {
     daChuPai = xuanZePai;//把选牌放入出牌区：打出选牌
@@ -1403,7 +1235,7 @@ bool Player::DaChuPaiAndClear()
 
 bool Player::AiChuPai()
 {
-    //    std::cerr << "AIChuPai" << std::endl;
+
     if (xuanZePai.yuanSuNum == 0){//电脑选牌区为空，说明不出
         buChu = true;
         return false;
@@ -1416,4 +1248,163 @@ void Player::GuoPai()
 {
     buChu = false;
     xuanZePai.Clear();
+}
+
+//直接出牌
+void Player::zhijieChuPai()
+{
+    if(chaiFenPai.size() == 1)//剩最后一手牌
+    {
+        xuanZePai = *chaiFenPai[0];
+        return;
+    }
+
+    if(chaiFenPai.size() == 2)
+    {
+        //剩两手牌，出最大的那组
+
+        //“查看”其它玩家手牌，只为分析剩余牌中的最大的
+        int maxNum = 0;
+        Player *p = game.ShangJia();
+        if(*p->shouPai.rbegin() > maxNum)
+            maxNum = *p->shouPai.rbegin();
+        p = game.XiaJia();
+        if(*p->shouPai.rbegin() > maxNum)
+            maxNum = *p->shouPai.rbegin();
+        for(auto cfp : chaiFenPai)
+        {
+            //如果手中有比剩余牌还大的一手牌，就先打出该牌
+            if(cfp->quanZhi > PokersZuHe::ZhuanQuanZhi(maxNum))
+            {
+                xuanZePai = *cfp;
+                return;
+            }
+        }
+
+        //否则，打出牌类型最大的牌
+        xuanZePai = *chaiFenPai[1];
+        return;
+    }
+    if(game.XiaJia()->shouPai.size() == 1)  //下家手牌为1
+    {
+        if(this != game.diZhu && game.zuiHou != game.diZhu) //下家为友方
+        {
+            //没试验过下家牌，就打出最小的一张；否则就正常出牌
+            if(!songXiaJiaZou)
+            {
+                if(chaiFenPai[0]->type == DanZhang &&
+                        chaiFenPai[0]->quanZhi == PokersZuHe::ZhuanQuanZhi(*(shouPai.begin())))
+                {
+                    xuanZePai = *chaiFenPai[0];
+                    return;
+                }
+                else {
+                    xuanZePai.AddPokersXuhao(*(shouPai.begin()));
+                    xuanZePai.type = DanZhang;
+                    xuanZePai.quanZhi = xuanZePai.pokerQuanZhi.begin()->first;
+                    //拆牌了！要重新分析牌
+                    ClearChaiFenPai();
+                    return;
+                }
+            }
+        }   else {
+            //下家为地方剩余1牌
+            //未实现
+        }
+    }
+    //正常顺序出牌：(A以上的牌尽量不直接出、炸弹不直接出)
+    //单牌→对子→双顺→单顺→三条、三带一、飞机
+    for (auto mem : chaiFenPai){
+        if ((mem->type == DanZhang || mem->type == DuiZi) &&
+                mem->quanZhi >= 15 || mem->type == ZhaDan)
+            continue;
+        xuanZePai = *mem;
+        return;
+    }
+    xuanZePai = *chaiFenPai[0];
+    return;
+}
+
+void Player::genYouFangPai()
+{
+    if(game.zuiHou != game.diZhu && game.ShangJia() == game.diZhu)
+    {
+        return; //上家为地主，但最后出牌方为友方，则不出牌
+    }
+    for (auto cfp : chaiFenPai)
+    {
+        //查找相应牌
+        if(cfp->type == game.zuiHou->daChuPai.type
+                &&  cfp->yuanSuNum == game.zuiHou->daChuPai.yuanSuNum
+                &&  cfp->quanZhi > game.zuiHou->daChuPai.quanZhi)
+        {
+            daChuPai = *cfp;
+            break;
+        }
+    }
+    if(chaiFenPai.size() >2 && xuanZePai.quanZhi > 14)
+        xuanZePai.Clear();  //手牌数大于2，并且所选择的牌权值大于14（A)，则不出牌
+    return;
+}
+
+void Player::genDiFangPai()
+{
+    auto zuiHouChuPai = game.zuiHou->daChuPai;//地方出牌
+
+    //拆成基本牌
+    ClearChaiFenPai();
+    FenXiChaiFenZuHe();
+    sort(chaiFenPai.begin(), chaiFenPai.end(), CompareMyself);
+
+    for(auto cfp : chaiFenPai)
+    {
+        if(cfp->type == zuiHouChuPai.type
+                && cfp->yuanSuNum == zuiHouChuPai.yuanSuNum
+                && cfp->quanZhi > cfp->quanZhi)
+        {
+            xuanZePai = *cfp;
+            return;
+        }
+    }
+
+    //需要拆牌
+    switch (zuiHouChuPai.type){
+    case DanZhang:  //敌方出的是单牌
+        XuYaoDanZhang();
+        break;
+    case DuiZi:
+        XuYaoDuiZi();
+        break;
+    case ShunZi:
+        XuYaoShunZi();
+        break;
+    case SanTiao:
+        break;
+    case SanDaiYi:
+        XuYaoSanDaiYi();
+    case FeiJi:     //飞机，需要组合
+        XuYaoFeiji();
+        break;
+    default:
+        break;
+    }
+
+    if(xuanZePai.yuanSuNum)
+        return;
+    //敌方剩一张牌，或有适合的炸弹，就出炸弹
+    if(zuiHouChuPai.yuanSuNum > 3 || zuiHouChuPai.quanZhi > 14)
+    {
+        for(auto cfp:chaiFenPai)
+        {
+            if(cfp->type == ZhaDan)
+            {
+                if(game.zuiHou->daChuPai.type == ZhaDan     //如果别人最后出牌为炸弹
+                        && cfp->quanZhi <= game.zuiHou->daChuPai.quanZhi)   //且自己的炸弹不大于对方时，
+                    continue;   //不能选择改牌
+                xuanZePai = *cfp;
+                return;
+            }
+        }
+    }
+    return;
 }

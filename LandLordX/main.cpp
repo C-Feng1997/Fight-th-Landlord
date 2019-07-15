@@ -3,6 +3,8 @@
 
 #include <QQmlApplicationEngine>
 #include "controlqml.h"
+#include "character.h"
+#include "game1.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +16,8 @@ int main(int argc, char *argv[])
     // QQmlApplicationEngine is the preferred way to start qml projects since Qt 5.2
     // if you have older projects using Qt App wizards from previous QtCreator versions than 3.1, please change them to QQmlApplicationEngine
     qmlRegisterType<ControlQml>("ControlQml",1,0,"ControlQml");
+    qmlRegisterType<Character>("Character",1,0,"Character");
+    qmlRegisterType<Game1>("Game1",1,0,"Game1");
 
     QQmlApplicationEngine engine;
 

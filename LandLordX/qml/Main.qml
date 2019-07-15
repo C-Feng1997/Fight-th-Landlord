@@ -1,6 +1,7 @@
 import Felgo 3.0
 import QtQuick 2.0
 import QtQuick.Controls 2.5
+import Game1 1.0
 
 GameWindow {
     id: gameWindow
@@ -10,8 +11,17 @@ GameWindow {
 
     activeScene: scene
 
+    Game1{
+        id: game1
+    }
+
     VideoShow{
         id:videoShow
+    }
+
+    Component.onCompleted: {
+        game1.loadGame()
+        modifyOperate.init(game1)
     }
 
     //主页面
@@ -36,6 +46,10 @@ GameWindow {
     }
     ModifyOperate{
         id: modifyOperate
+        onSaveModification: {
+            saveSetting(game1)
+            game1.saveGame()
+        }
     }
 
     Scene {

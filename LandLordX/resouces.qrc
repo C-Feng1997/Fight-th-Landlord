@@ -35,5 +35,7 @@
         <file>images/touxiang/touxiang4.png</file>
         <file>images/touxiang/touxiang5.png</file>
         <file>images/touxiang/touxaing2.png</file>
+        <file>images/icons/win.png</file>
+        <file>images/icons/fail.png</file>
     </qresource>
 </RCC>

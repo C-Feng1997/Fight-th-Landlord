@@ -11,6 +11,7 @@ Item {
     id: modifyOperate
     width: 400
     height: 200
+    signal saveModification //保存配置的修改
 
     //修改游戏头像
     QQD.Dialog {
@@ -77,6 +78,10 @@ Item {
                 }
             }
         }
+        onAccepted: {
+            saveModification()
+            game1.saveGame()
+        }
 
     }
 
@@ -95,7 +100,22 @@ Item {
                 playing.text=changeText.text
                 startScene.text1=changeText.text
             }
+            saveModification()
+            game1.saveGame()
         }
+    }
+    function init(game1){
+        changeText.text=game1.player.userName
+        playing.text=game1.player.userName
+        startScene.text1=game1.player.userName
+
+//        image2.source= game1.player.avatar
+        startScene.source =  game1.player.avatar
+        playing.source =  game1.player.avatar
+    }
+    function saveSetting(game1){
+        game1.player.userName=changeText.text
+        game1.player.avatar= startScene.source
     }
 }
 

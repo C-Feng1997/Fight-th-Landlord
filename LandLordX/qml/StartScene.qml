@@ -20,7 +20,8 @@ Item{
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
 
-        source: "qrc:/images/touxiang/touxiang1.png"
+//        source: "qrc:/images/touxiang/touxiang1.png"
+        source: game1.player.avatar
         MouseArea{
             anchors.fill: parent
             onPressed: touxiangImage.opacity=0.5
@@ -90,6 +91,7 @@ Item{
             }
         }
     }
+
     TexturePackerAnimatedSprite{
         id:texture
         anchors.left: parent
